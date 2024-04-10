@@ -1,0 +1,39 @@
+.home-container {
+    .images-container {
+        padding: 10px;
+        border: 1px solid #dedede;
+        border-radius: 10px;
+        .post-userlogo {
+            border-radius: 50px;
+        }
+        .post-user {
+            padding-left: 10px;
+            padding-top: 5px;
+        }
+        .post-image {
+            padding: 10px;
+        }
+        .post-description {
+            padding: 10px;
+        }
+        .post-sub {
+            display: flex;
+            padding: 10px;
+        }
+    }
+.heading{
+    justify-content: center;
+    display: flex;
+    text-align: center;
+    padding: 20px;
+    font-size: 20px;
+    font-weight: 600;
+}
+.form {
+    .inputs {
+        border: 1px solid #dedede;
+        border-radius: 10px;
+        padding: 10px;
+    }
+}
+}

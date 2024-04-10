@@ -1,0 +1,38 @@
+.login-container {
+    height: 250px;
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    
+    margin: auto;
+    border: 1px solid #dedede;
+    border-radius: 10px;
+    width: 500px;
+    padding: 50px;
+    .login-div {
+        display: flex;
+        justify-content: center;
+        .block {
+            text-align: center;
+        }
+    }
+    .heading {
+        font-size: 20px;
+        font-weight: 600;
+        color: navy;
+    }
+    .sub-heading {
+        font-size: 18px;
+        font-weight: 600;
+        padding: 10px;
+    }
+.button {
+    cursor: pointer;
+    padding: 10px;
+    background: white;
+    border-radius: 20px;
+    border: 1px solid #dedede;
+}
+}
