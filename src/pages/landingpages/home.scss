@@ -19,6 +19,9 @@
         .post-sub {
             display: flex;
             padding: 10px;
+            .likes-div {
+                cursor: pointer;
+            }
         }
     }
 .heading{
