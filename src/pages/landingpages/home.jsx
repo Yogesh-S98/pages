@@ -51,24 +51,24 @@ function Home() {
             <Col xs lg='6' className="images-container">
                 <div style={{display: 'block'}}>
                 <div style={{display: 'flex'}}>
-                    <img className="post-userlogo" src={item.user.photoURL} width={30}/>
+                    <img className="post-userlogo" alt="profile" src={item.user.photoURL} width={30}/>
                     <div className="post-user">{item.user.displayName}</div>
                 </div>
-                <img className="post-image" src={item.file} style={{width: '100%'}} />
+                <img className="post-image" alt="post" src={item.file} style={{width: '100%'}} />
                 {item.message.length > 0 ? <div className="post-description">
                     {item.message}
                 </div> : ''}
                 <div className="post-sub">
                     <div className="likes-div">
                     { item.likes === 'under'
-                        ? <img src={likeUrl} onClick={() => handleLike(item.id, true)}  width={20} />
+                        ? <img alt="like" src={likeUrl} onClick={() => handleLike(item.id, true)}  width={20} />
                         : item.likes.filter((d) => d.like === true && d.userId === userId).length > 0 ? 
                         item.likes.filter((d) => d.like === true && d.userId === userId)
                         .map((d) => (
                             <div>
-                                <img src={redlikeUrl} onClick={() => addLike(d.postId, false, item)}  width={20} />
+                                <img alt="redlike" src={redlikeUrl} onClick={() => addLike(d.postId, false, item)}  width={20} />
                             </div>
-                        )) : <img src={likeUrl} onClick={() => addLike(item.id, true, item)}  width={20} />
+                        )) : <img alt="likeadd" src={likeUrl} onClick={() => addLike(item.id, true, item)}  width={20} />
                     }
                     </div>
                     <div style={{ paddingLeft: '5px', paddingTop: '2px' }}>{
@@ -122,7 +122,7 @@ function Home() {
                     </div>
                     <Row style={{margin: '0px'}}>
                     <Col>
-                    <Col lg='9' style={{display: 'flex', justifyContent: 'end'}}>
+                    <Col lg='9' style={{display: 'flex', justifyContent: 'flex-end'}}>
                     <Button onClick={openModal}>Upload</Button>
                     </Col>
                     { list.length > 0 ? 

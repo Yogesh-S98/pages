@@ -49,7 +49,7 @@ class UploadPosts extends Component {
                 
                 </div>
                 </div>
-            <div style={{display: 'flex', justifyContent:'end'}}>
+            <div style={{display: 'flex', justifyContent:'flex-end'}}>
                 <Button
                     style={{margin: '10px'}}
                     onClick={this.submitProp}
