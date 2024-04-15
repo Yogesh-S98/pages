@@ -1,13 +1,13 @@
 import React, { Component, useEffect, useState } from "react";
 import { auth } from "../../googleSignIn/config";
-import { Menu } from 'antd';
+// import { Menu } from 'antd';
 import { signOut } from "firebase/auth";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from "react-router-dom";
 import '../landingpages/navbar.scss';
 import Stack from 'react-bootstrap/Stack';
 import Col from 'react-bootstrap/Col';
-const { Item } = Menu;
+// const { Item } = Menu;
 
 function NavBar() {
     const [user] = useAuthState(auth);
