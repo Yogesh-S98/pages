@@ -18,17 +18,17 @@ import { v4 } from 'uuid';
 import { getDownloadURL, getStorage, listAll, ref, updateMetadata, uploadBytes } from 'firebase/storage';
 import { errorNotification, successNotification } from "../common/notification";
 
-var admin = require('firebase-admin');
+// var admin = require('firebase-admin');
 
-var serviceAccount = require('./servicekey.json');
+// var serviceAccount = require('./servicekey.json');
 
 const firebaseConfig = {
     apiKey: "AIzaSyDdLYxSw2LSzUJjBR8heFR_hrRgIa9-BcE",
     authDomain: "authapp-74df5.firebaseapp.com",
     projectId: "authapp-74df5",
     storageBucket: "authapp-74df5.appspot.com",
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://authapp-74df5-default-rtdb.europe-west1.firebasedatabase.app",
+    // credential: admin.credential.cert(serviceAccount),
+    // databaseURL: "https://authapp-74df5-default-rtdb.europe-west1.firebasedatabase.app",
     messagingSenderId: "699012364284",
     appId: "1:699012364284:web:43bc488072d85a2414a479"
 };
