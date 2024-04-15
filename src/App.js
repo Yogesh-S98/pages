@@ -9,9 +9,12 @@ import Login from './pages/authPages/login';
 import "./App.scss";
 import Home from "./pages/landingpages/home";
 import { ProtectRoute, ProtectRoute2 } from "./Auth";
+import { ToastContainer } from 'react-toastify';
+
 
 function App() {
         return (
+          <div>
           <BrowserRouter>
             <Routes>
             <Route path="/" element={
@@ -32,6 +35,8 @@ function App() {
                 </Route>
             </Routes>
           </BrowserRouter>
+          <ToastContainer></ToastContainer>
+          </div>
         );
 }
 

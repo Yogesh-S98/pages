@@ -16,6 +16,7 @@ import {
 } from "firebase/firestore";
 import { v4 } from 'uuid';
 import { getDownloadURL, getStorage, listAll, ref, updateMetadata, uploadBytes } from 'firebase/storage';
+import { errorNotification, successNotification } from "../common/notification";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDdLYxSw2LSzUJjBR8heFR_hrRgIa9-BcE",
@@ -39,7 +40,7 @@ export const signInWithGoogle = async () => {
     try {
         const res = await signInWithPopup(auth, provider);
         const user = res.user;
-        localStorage.setItem('user', res);
+        successNotification('Login successfully');
         // const q = query(collection(db, "users"), where("uid", "==", user.uid));
         // const docs = await getDocs(q);
         // if (docs.docs.length === 0) {
@@ -51,10 +52,12 @@ export const signInWithGoogle = async () => {
         //         avatar: user.photoURL
         //     });
         // }
-        if (user) {
-        }
+        // if (user) {
+        //     notify;
+        // }
         return user;
     } catch (err) {
+        errorNotification('error');
         console.error(err);
         // show toaster
         return err;
@@ -72,10 +75,12 @@ export const savePosts = async ({ name, file }) => {
             name: file.name,
             likes: 'under',
             file: downloadURL,
-            message: name.length > 0 ? name : '',
+            message: '',
         });
+        successNotification('Post Uploaded');
         return docResult;
     } catch (error) {
+        errorNotification(error);
         console.error(error);
         return error;
     }

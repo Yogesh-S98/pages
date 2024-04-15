@@ -1,8 +1,7 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import NavBar from "./navbar";
 import './home.scss';
 
-import { toast } from "react-toastify";
 import likeUrl from '../../assets/heart.png';
 import redlikeUrl from '../../assets/redheart.png';
 import { Postlikes, addLikes, getPosts, getSavePosts, getSaved, saveLike, savePosts } from "../../googleSignIn/config";
@@ -99,7 +98,7 @@ function Home() {
                     {item.message}
                 </div> : ''}
                 <div className="post-sub">
-                    <div>
+                    <div className="likes-div">
                     { item.likes === 'under'
                         ? <img src={likeUrl} onClick={() => handleLike(item.id, true)}  width={20} />
                         : item.likes.filter((d) => d.like === true && d.userId === userId).length > 0 ? 
@@ -132,10 +131,6 @@ function Home() {
             load();
         }
     }
-    const toaster = () => {
-        // Calling toast method by passing string
-        toast("Hello Geeks");
-    };
     if (loading) {
         return <div>'loading'</div>;
     }
@@ -144,7 +139,7 @@ function Home() {
             <NavBar></NavBar>
             <Container fluid='sm' className="home-container">
                 <div className="heading">
-                    Welcome to load pack
+                    Welcome to pages
                 </div>
                 <div>
                     <div>
