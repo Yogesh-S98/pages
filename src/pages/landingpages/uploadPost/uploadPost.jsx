@@ -1,4 +1,4 @@
-import React, { Component, useRef, useState } from "react";
+import React, { Component } from "react";
 import Button from 'react-bootstrap/Button';
 
 class UploadPosts extends Component {

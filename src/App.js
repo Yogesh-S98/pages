@@ -1,9 +1,8 @@
-import React, { Component, useEffect, useState } from "react";
+import React from "react";
 import {
     BrowserRouter,
     Routes,
     Route,
-    Link,
 } from "react-router-dom";
 import Login from './pages/authPages/login';
 import "./App.scss";

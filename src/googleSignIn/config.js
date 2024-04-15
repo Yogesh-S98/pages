@@ -1,21 +1,17 @@
 import { initializeApp } from "firebase/app";
 // import {getStorage, ref} from 'firebase/storage';
-import {getAuth, GoogleAuthProvider, signInWithPopup, signOut} from 'firebase/auth';
+import {getAuth, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
 
 import {
     getFirestore,
     query,
     getDocs,
     collection,
-    where,
     addDoc,
-    documentId,
-    onSnapshot,
     doc,
     updateDoc,
 } from "firebase/firestore";
-import { v4 } from 'uuid';
-import { getDownloadURL, getStorage, listAll, ref, updateMetadata, uploadBytes } from 'firebase/storage';
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { errorNotification, successNotification } from "../common/notification";
 
 // var admin = require('firebase-admin');

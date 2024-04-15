@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useContext, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import NavBar from "./navbar";
 import './home.scss';
 
 import likeUrl from '../../assets/heart.png';
 import redlikeUrl from '../../assets/redheart.png';
-import { Postlikes, addLikes, getPosts, getSavePosts, getSaved, saveLike, savePosts } from "../../googleSignIn/config";
+import { addLikes, getSavePosts, saveLike, savePosts } from "../../googleSignIn/config";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -18,14 +18,9 @@ function Home() {
     const [userId, setUserId] = useState('');
     const [list, setList] = useState([]);
     const [loading, setloading] = useState(true);
-    const [file, setFiles] = useState(null);
     const [show, setShow] = useState(false);
-    const [like, setLike] = useState([]);
     const openModal = () => setShow(true);
     const closeModal = () => setShow(false);
-    const updateValue = (e) => {
-        setname(e);
-    }
     const load = async () => {
         getSavePosts().then(results => {
             setList(results);
@@ -37,12 +32,6 @@ function Home() {
         await saveLike({ postId, like: value, userId: userId });
         load();
     }
-    const removeLike = (item, value, list) => {
-        const array = list.likes.map((d) => {
-            return d;
-        })
-        console.log('dsaf', array);
-    }
     const addLike = async (item, value, list) => {
         const array = list.likes.map((d) => {
             return d;
@@ -50,34 +39,6 @@ function Home() {
         array.push({ postId: item, like: value, userId: userId })
         await addLikes({ likes: array, postId: item });
         load();
-    }
-    const myLikes = (item, value) => {
-        console.log('sadfa', item, value);
-        return (
-            <div>
-                <img src={redlikeUrl} onClick={() => handleLike(item.postId, false, value)} width={20} />
-            </div>
-        )
-    }
-    const likesList = (item, value) => {
-        const set = value.likes.filter((d) => d.userId === userId && d.like === true);
-        console.log('dsafa', set);
-        return (
-            <div>
-                {
-                    set.map((d) => myLikes(d, value))
-                }
-            {/* {
-            item.userId === userId && item.like !== false ?
-            (item.userId === userId && item.like === true) ? <img src={redlikeUrl} onClick={() => handleLike(item.postId, false, value)} width={20} />
-                    : <img src={likeUrl} onClick={() => addLike(item.postId, true, value)}  width={20} />
-                : <img src={likeUrl} onClick={() => addLike(item.postId, true, value)}  width={20} />
-            } */}
-            </div>
-        )
-    }
-    const filterLikes = item => {
-        console.log('asdfa', item);
     }
     useEffect(()=> {
         const user = JSON.parse(localStorage.getItem('user'));
@@ -118,10 +79,6 @@ function Home() {
             </Col>
             </div>
         )
-    }
-    const updateFile = (event) => {
-        // setFiles(event.target.files);
-        setFiles(event.target.files[0]);
     }
     const Submit = async (file) => {
         const result = await savePosts({ name, file });
