@@ -100,6 +100,7 @@ function Home() {
                         )) : <img alt="likeadd" src={likeUrl} onClick={() => addLike(item.id, true, item)}  width={20} />
                     }
                     </div>
+                    hi
                     <div style={{ paddingLeft: '5px', paddingTop: '2px' }}>{
                      item.likes === 'under' ? '' : item.likes.filter((x) => x.like).length === 0
                         ? '' : item.likes.filter((x) => x.like).length}</div>
