@@ -187,7 +187,10 @@ function Home() {
                                             value={comment}
                                             onChange={updateComment}
                                             />
-                                            <Button id="button-addon2" onClick={sendComment}>
+                                            <Button
+                                                id="button-addon2"
+                                                // onClick={sendComment}
+                                                >
                                                 Send
                                             </Button>
                                     </InputGroup>
