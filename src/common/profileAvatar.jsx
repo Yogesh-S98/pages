@@ -24,7 +24,7 @@ class ProfileAvatar extends Component {
     }
 
     render() {
-        const { userId } = this.props.data;
+        // const { userId } = this.props.data;
         const { userProfile } = this.state;
 
         return (

@@ -5,7 +5,7 @@ import './home.scss';
 import likeUrl from '../../assets/heart.png';
 import redlikeUrl from '../../assets/redheart.png';
 import message from '../../assets/messages.png';
-import { addLikes, getDetails, getPost, getSavePosts, saveComment, saveLike, savePosts } from "../../googleSignIn/config";
+import { addLikes, getPost, getSavePosts, saveComment, saveLike, savePosts } from "../../googleSignIn/config";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -15,7 +15,7 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import UploadPosts from "./uploadPost/uploadPost";
 import ProfileAvatar from "../../common/profileAvatar";
-import { json } from "react-router-dom";
+// import { json } from "react-router-dom";
 
 
 function Home() {
@@ -27,7 +27,6 @@ function Home() {
     const [show, setShow] = useState(false);
     const [showComment, setShowComment] = useState(false);
     const [comment, setComment] = useState('');
-    const [Idpost, setIdpost] = useState('');
     const openComment = (value) => {
         setloading(true);
         setShowComment(true);
