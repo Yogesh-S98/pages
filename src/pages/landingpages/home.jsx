@@ -104,7 +104,7 @@ function Home() {
                      item.likes === 'under' ? '' : item.likes.filter((x) => x.like).length === 0
                         ? '' : item.likes.filter((x) => x.like).length}</div>
                     <div className="comments-div" onClick={() => openComment(item.id)}>
-                        <img src={message} width={20} />
+                        <img src={message} alt="comment" width={20} />
                     </div>
                 </div>
                 </div>
