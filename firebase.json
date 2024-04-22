@@ -1,6 +1,5 @@
 {
   "hosting": {
-    "site": "pages-apps",
     "public": "build",
     "ignore": [
       "firebase.json",

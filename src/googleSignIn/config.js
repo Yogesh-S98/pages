@@ -10,6 +10,8 @@ import {
     addDoc,
     doc,
     updateDoc,
+    where,
+    getDoc,
 } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { errorNotification, successNotification } from "../common/notification";
@@ -41,21 +43,18 @@ export const signInWithGoogle = async () => {
     try {
         const res = await signInWithPopup(auth, provider);
         const user = res.user;
+        const q = query(collection(db, "users"), where("uid", "==", user.uid));
+        const docs = await getDocs(q);
+        if (docs.docs.length === 0) {
+            await addDoc(collection(db, "users"), {
+                uid: user.uid,
+                name: user.displayName,
+                authProvider: "google",
+                email: user.email,
+                avatar: user.photoURL
+            });
+        }
         successNotification('Login successfully');
-        // const q = query(collection(db, "users"), where("uid", "==", user.uid));
-        // const docs = await getDocs(q);
-        // if (docs.docs.length === 0) {
-        //     await addDoc(collection(db, "users"), {
-        //         uid: user.uid,
-        //         name: user.displayName,
-        //         authProvider: "google",
-        //         email: user.email,
-        //         avatar: user.photoURL
-        //     });
-        // }
-        // if (user) {
-        //     notify;
-        // }
         return user;
     } catch (err) {
         errorNotification('error');
@@ -98,6 +97,37 @@ export const saveLike = async ({ postId, like, userId }) => {
         console.error(error);
         return error;
     }
+}
+
+export const saveComment = async ({ Idpost, comment, userId }) => {
+    console.log('doc', Idpost, comment, userId);
+    try {
+        const docRef = doc(db, "files", Idpost);
+        const docResult = await updateDoc(docRef, {
+           comments: [{ comment: comment, userId: userId, postId: Idpost }], 
+        });
+        successNotification('Comment Saved');
+        return docResult;
+    } catch (error) {
+        console.log(error);
+        return error;
+    }
+}
+
+export const getDetails = async () => {
+    const q = query(collection(db, "users"), where("uid", "==", user.uid));
+    const querySnapshot = await getDocs(q);
+    const que = querySnapshot.docs.map(doc => ({
+        ...doc.data()
+    }))
+    return que[0];
+}
+
+export const getPost = async (postId) => {
+    const ref = doc(db, `files/${postId}`);
+    const querySnapshot = await getDoc(ref);
+    console.log('dsafa', querySnapshot.data());
+    return querySnapshot.data();
 }
 
 export const addLikes = async ({ likes, postId }) => {

@@ -4,23 +4,48 @@ import './home.scss';
 
 import likeUrl from '../../assets/heart.png';
 import redlikeUrl from '../../assets/redheart.png';
-import { addLikes, getSavePosts, saveLike, savePosts } from "../../googleSignIn/config";
+import message from '../../assets/messages.png';
+import { addLikes, getDetails, getPost, getSavePosts, saveComment, saveLike, savePosts } from "../../googleSignIn/config";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 import UploadPosts from "./uploadPost/uploadPost";
+import ProfileAvatar from "../../common/profileAvatar";
+import { json } from "react-router-dom";
 
 
 function Home() {
     const [name, setname] = useState();
     const [userId, setUserId] = useState('');
+    const [commentList, setCommentList] = useState([]);
     const [list, setList] = useState([]);
     const [loading, setloading] = useState(true);
     const [show, setShow] = useState(false);
+    const [showComment, setShowComment] = useState(false);
+    const [comment, setComment] = useState('');
+    const [Idpost, setIdpost] = useState('');
+    const openComment = (value) => {
+        setloading(true);
+        setShowComment(true);
+        commentapi(value);
+    };
+    const commentapi = (val) => {
+        getPost(val).then(res =>  {
+            setCommentList(res.comments);
+            setloading(false);
+        });
+    }
+    const closeComment = () => setShowComment(false);
     const openModal = () => setShow(true);
     const closeModal = () => setShow(false);
+    const updateComment = (event) => {
+        setComment(event.target.value);
+        console.log('dadf', event);
+    }
     const load = async () => {
         getSavePosts().then(results => {
             setList(results);
@@ -31,6 +56,10 @@ function Home() {
     const handleLike = async (postId, value) => {
         await saveLike({ postId, like: value, userId: userId });
         load();
+    }
+    const sendComment = async () => {
+        await saveComment({ Idpost, comment, userId: userId });
+        // loadComment();
     }
     const addLike = async (item, value, list) => {
         const array = list.likes.map((d) => {
@@ -74,6 +103,9 @@ function Home() {
                     <div style={{ paddingLeft: '5px', paddingTop: '2px' }}>{
                      item.likes === 'under' ? '' : item.likes.filter((x) => x.like).length === 0
                         ? '' : item.likes.filter((x) => x.like).length}</div>
+                    <div className="comments-div" onClick={() => openComment(item.id)}>
+                        <img src={message} width={20} />
+                    </div>
                 </div>
                 </div>
             </Col>
@@ -87,6 +119,19 @@ function Home() {
             setShow(false);
             load();
         }
+    }
+    const renderComment = (item) => {
+        return (
+            <div>
+                <div key={item.postId}>
+                    <ProfileAvatar
+                        data={item}
+                        >
+                    </ProfileAvatar>
+                    {item.comment}
+                </div>
+            </div>
+        )
     }
     if (loading) {
         return <div>'loading'</div>;
@@ -115,6 +160,40 @@ function Home() {
                                     submitPost={Submit}
                                 >
                                 </UploadPosts>
+                            </Modal.Body>
+                        </Modal>
+                        <Modal size="lg" show={showComment} className="comments-container">
+                        <Modal.Header style={{display: 'flex', justifyContent: 'space-between'}}>
+                                <Modal.Title>
+                                    Comments
+                                </Modal.Title>
+                                    <div
+                                        style={{fontSize: '18px',fontWeight: 600,
+                                            color: '#919090', cursor: 'pointer'}}
+                                        onClick={closeComment}>X</div>
+                            </Modal.Header>
+                            <Modal.Body>
+                                { loading ? (<p>loading ...</p>) :
+                                <div>
+                                    <div>
+                                    {commentList ? commentList.map((item) => renderComment(item)) : ''}
+                                    </div>
+                                    <div className="comments-input">
+                                    <InputGroup className="mb-3">
+                                        <Form.Control
+                                            placeholder="Comment"
+                                            aria-label="Comment"
+                                            aria-describedby="basic-addon1"
+                                            value={comment}
+                                            onChange={updateComment}
+                                            />
+                                            <Button id="button-addon2" onClick={sendComment}>
+                                                Send
+                                            </Button>
+                                    </InputGroup>
+                                    </div>
+                                </div>
+                                }
                             </Modal.Body>
                         </Modal>
                     </div>
