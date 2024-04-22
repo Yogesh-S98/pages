@@ -5,7 +5,7 @@ import './home.scss';
 import likeUrl from '../../assets/heart.png';
 import redlikeUrl from '../../assets/redheart.png';
 import message from '../../assets/messages.png';
-import { addLikes, getPost, getSavePosts, saveComment, saveLike, savePosts } from "../../googleSignIn/config";
+import { addLikes, getPost, getSavePosts, saveLike, savePosts } from "../../googleSignIn/config";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
