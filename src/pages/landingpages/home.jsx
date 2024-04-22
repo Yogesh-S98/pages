@@ -56,10 +56,10 @@ function Home() {
         await saveLike({ postId, like: value, userId: userId });
         load();
     }
-    const sendComment = async () => {
-        await saveComment({ Idpost, comment, userId: userId });
-        // loadComment();
-    }
+    // const sendComment = async () => {
+    //     await saveComment({ Idpost, comment, userId: userId });
+    //     // loadComment();
+    // }
     const addLike = async (item, value, list) => {
         const array = list.likes.map((d) => {
             return d;
