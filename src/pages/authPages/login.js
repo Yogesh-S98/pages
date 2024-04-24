@@ -2,6 +2,7 @@ import React from 'react';
 import { signInWithGoogle} from '../../googleSignIn/config';
 import { useNavigate } from 'react-router-dom';
 import '../authPages/login.scss';
+import { Col } from 'react-bootstrap';
 
 function Login() {
     const Navigate = useNavigate();
@@ -15,13 +16,13 @@ function Login() {
       }
     return (
         <div className='login-container'>
-          <div className='login-div'>
+          <Col className='login-div'>
             <div className='block'>
-            <div className='heading'>Pages</div>
-            <div className='sub-heading'>Login</div>
-        <button onClick={handleGoogleSingIn} className='button'>Sign in with google</button>
-        </div>
-        </div>
+              <div className='heading'>Pages</div>
+              <div className='sub-heading'>Login</div>
+              <button onClick={handleGoogleSingIn} className='button'>Sign in with google</button>
+            </div>
+        </Col>
         </div>
     );
 }

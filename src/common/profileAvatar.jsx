@@ -7,6 +7,7 @@ class ProfileAvatar extends Component {
         this.state = {
             userProfile: null
         }
+        this.fetchUserDetails = this.fetchUserDetails.bind(this);
     }
 
     componentDidMount() {
@@ -24,9 +25,8 @@ class ProfileAvatar extends Component {
     }
 
     render() {
-        // const { userId } = this.props.data;
+        const { userId } = this.props.data;
         const { userProfile } = this.state;
-
         return (
             <div>
                 {userProfile ? (

@@ -63,6 +63,35 @@ export const signInWithGoogle = async () => {
         return err;
     }
 };
+
+export const saveComment = async ({ postId, comment, userId }) => {
+    try {
+        const docResult = await addDoc(collection(db, "comments"), {
+            userId: userId,
+            postId: postId,
+            comment: comment
+        });
+        successNotification('Comment Saved');
+        return docResult;
+    } catch (error) {
+        console.log(error);
+        return error;
+    }
+}
+
+export const getComments = async (value) => {
+    const q = query(collection(db, "comments"), where("postId", "==", value));
+    const querySnapshot = await getDocs(q);
+    const que = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+    return que;
+}
+
+export const updateComment = async (value, id) => {
+    const docRef = doc(db, "comments", id);
+    await updateDoc(docRef, value);
+    return docRef;
+}
+
 const user = JSON.parse(localStorage.getItem('user'));
 export const savePosts = async ({ name, file }) => {
     try {
@@ -99,23 +128,23 @@ export const saveLike = async ({ postId, like, userId }) => {
     }
 }
 
-export const saveComment = async ({ Idpost, comment, userId }) => {
-    console.log('doc', Idpost, comment, userId);
-    try {
-        const docRef = doc(db, "files", Idpost);
-        const docResult = await updateDoc(docRef, {
-           comments: [{ comment: comment, userId: userId, postId: Idpost }], 
-        });
-        successNotification('Comment Saved');
-        return docResult;
-    } catch (error) {
-        console.log(error);
-        return error;
-    }
-}
+// export const saveComment = async ({ Idpost, comment, userId }) => {
+//     console.log('doc', Idpost, comment, userId);
+//     try {
+//         const docRef = doc(db, "files", Idpost);
+//         const docResult = await updateDoc(docRef, {
+//            comments: [{ comment: comment, userId: userId, postId: Idpost }], 
+//         });
+//         successNotification('Comment Saved');
+//         return docResult;
+//     } catch (error) {
+//         console.log(error);
+//         return error;
+//     }
+// }
 
-export const getDetails = async () => {
-    const q = query(collection(db, "users"), where("uid", "==", user.uid));
+export const getDetails = async (value) => {
+    const q = query(collection(db, "users"), where("uid", "==", value));
     const querySnapshot = await getDocs(q);
     const que = querySnapshot.docs.map(doc => ({
         ...doc.data()
@@ -129,6 +158,20 @@ export const getPost = async (postId) => {
     console.log('dsafa', querySnapshot.data());
     return querySnapshot.data();
 }
+
+// export const saveComment = async ({ comments, postId }) => {
+//     try {
+//         const docRef = doc(db, "files", postId);
+//         await updateDoc(docRef, {
+//            comments: comments,
+//         });
+//         successNotification('Comment Saved');
+//         return docRef;
+//     } catch (error) {
+//         console.log(error);
+//         return error;
+//     }
+// }
 
 export const addLikes = async ({ likes, postId }) => {
     try {

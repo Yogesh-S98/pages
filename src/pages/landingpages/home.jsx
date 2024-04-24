@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import NavBar from "./navbar";
 import './home.scss';
 
 import likeUrl from '../../assets/heart.png';
 import redlikeUrl from '../../assets/redheart.png';
 import message from '../../assets/messages.png';
-import { addLikes, getPost, getSavePosts, saveLike, savePosts } from "../../googleSignIn/config";
+import { addLikes, getComments, getPost, getSavePosts, saveComment, saveLike, savePosts } from "../../googleSignIn/config";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -14,7 +14,7 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import UploadPosts from "./uploadPost/uploadPost";
-import ProfileAvatar from "../../common/profileAvatar";
+import CommentsList from "./uploadPost/commentsList";
 // import { json } from "react-router-dom";
 
 
@@ -27,14 +27,17 @@ function Home() {
     const [show, setShow] = useState(false);
     const [showComment, setShowComment] = useState(false);
     const [comment, setComment] = useState('');
+    const [Idpost, setIdpost] = useState('');
+    const commentsCom = useRef(null);
     const openComment = (value) => {
         setloading(true);
         setShowComment(true);
         commentapi(value);
     };
-    const commentapi = (val) => {
-        getPost(val).then(res =>  {
-            setCommentList(res.comments);
+    const commentapi = async (val) => {
+        getComments(val).then(res => {
+            setIdpost(val);
+            setCommentList(res);
             setloading(false);
         });
     }
@@ -56,10 +59,29 @@ function Home() {
         await saveLike({ postId, like: value, userId: userId });
         load();
     }
-    // const sendComment = async () => {
-    //     await saveComment({ Idpost, comment, userId: userId });
-    //     // loadComment();
-    // }
+    const sendComment = async () => {
+        // let comments = [];
+        // if (commentList) {
+        //     comments = commentList.map((d) => {
+        //         return d;
+        //     })
+        // };
+        // comments.push({ postId: Idpost, comment: comment, userId: userId });
+        // await saveComment({ comments: comments, postId: Idpost }).then(res => {
+        //     if (res) {
+        //         setComment('');
+        //     }
+        // });
+        await saveComment({ postId: Idpost, comment: comment, userId: userId }).then(res => {
+            if (res) {
+                setComment('');
+                if (commentsCom.current) {
+                    commentsCom.current.loadList(Idpost);
+                }
+            }
+        });
+        // loadComment();
+    }
     const addLike = async (item, value, list) => {
         const array = list.likes.map((d) => {
             return d;
@@ -119,19 +141,18 @@ function Home() {
             load();
         }
     }
-    const renderComment = (item) => {
-        return (
-            <div>
-                <div key={item.postId}>
-                    <ProfileAvatar
-                        data={item}
-                        >
-                    </ProfileAvatar>
-                    {item.comment}
-                </div>
-            </div>
-        )
-    }
+    // const renderComment = (item) => {
+    //     return (
+    //         <div>
+    //             <div key={item.postId}>
+    //                 <CommentsList
+    //                     data={item}
+    //                     >
+    //                 </CommentsList>
+    //             </div>
+    //         </div>
+    //     )
+    // }
     if (loading) {
         return <div>'loading'</div>;
     }
@@ -175,7 +196,11 @@ function Home() {
                                 { loading ? (<p>loading ...</p>) :
                                 <div>
                                     <div>
-                                    {commentList ? commentList.map((item) => renderComment(item)) : ''}
+                                    {/* {commentList ? commentList.map((item) => renderComment(item)) : ''} */}
+                                    <CommentsList
+                                        ref={commentsCom}
+                                        data={commentList}
+                                    ></CommentsList>
                                     </div>
                                     <div className="comments-input">
                                     <InputGroup className="mb-3">
@@ -188,7 +213,7 @@ function Home() {
                                             />
                                             <Button
                                                 id="button-addon2"
-                                                // onClick={sendComment}
+                                                onClick={sendComment}
                                                 >
                                                 Send
                                             </Button>
