@@ -15,15 +15,15 @@ function Login() {
         }
       }
     return (
-        <div className='login-container'>
-          <Col className='login-div'>
+        <Col className='login-container' xs='10' lg='4'>
+          <div className='login-div'>
             <div className='block'>
               <div className='heading'>Pages</div>
               <div className='sub-heading'>Login</div>
               <button onClick={handleGoogleSingIn} className='button'>Sign in with google</button>
             </div>
+          </div>
         </Col>
-        </div>
     );
 }
 
