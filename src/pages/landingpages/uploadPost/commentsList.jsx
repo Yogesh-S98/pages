@@ -80,7 +80,7 @@ class CommentsList extends Component {
         if (item.userId === user.uid) {
             return (
                 <Col
-                    xl lg="1"
+                    xs='5' lg="1"
                     style={{ cursor: 'pointer' }}
                     onClick={() => this.editComment(item)}>
                     Edit
@@ -128,7 +128,7 @@ class CommentsList extends Component {
                         </div> : <div>{item.comment}</div>
                     }
                     <Row style={{ display: 'flex' }}>
-                    <Col xl lg="1">Reply</Col>{this.renderEdit(item)}
+                    <Col xs='5' lg="1">Reply</Col>{this.renderEdit(item)}
                     </Row>
                 </Col>
             </div>
