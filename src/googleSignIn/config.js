@@ -56,7 +56,6 @@ export const signInWithGoogle = async () => {
         }
         successNotification('Login successfully');
         const result = docs.docs.map((data) => data.data())[0];
-        localStorage.setItem('user', JSON.stringify(result));
         return result;
     } catch (err) {
         errorNotification('error');

@@ -8,11 +8,12 @@ function Login() {
     const Navigate = useNavigate();
     // const [value,setValue] = useState('');
     const handleGoogleSingIn = async () => {
-        const user = await signInWithGoogle();
-        // localStorage.setItem('user', JSON.stringify(user));
-        if (user) {
-          Navigate('/home');
-        }
+        await signInWithGoogle().then(res => {
+          localStorage.setItem('user', JSON.stringify(res));
+          if (res) {
+            Navigate('/home');
+          }
+        });
       }
     return (
         <Col className='login-container' xs='10' lg='4'>

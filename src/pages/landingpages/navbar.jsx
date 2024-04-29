@@ -13,7 +13,6 @@ import { Col, Row } from "react-bootstrap";
 function NavBar() {
     const params = useLocation();
     // const [user] = useAuthState(auth);
-    const [users, setUsers] = useState('');
     const Navigate = useNavigate();
     const [menu, showMenu] = useState(false);
     const logout = () => {
@@ -22,12 +21,12 @@ function NavBar() {
         localStorage.clear();
     }
     const Id = params.pathname.split('/')[2];
+    const users = JSON.parse(localStorage.getItem('user'));
     useEffect(() => {
-        setUsers(JSON.parse(localStorage.getItem('user')));
         // if (user) {
         //     getProfile(user.uid);
         // }
-    }, [Id]);
+    }, [users], [Id]);
     // const getProfile = item => {
     //     getDetails(item).then(res => {
     //         setUsers(res);
@@ -37,21 +36,23 @@ function NavBar() {
         <div>
         { localStorage.getItem('user') ?
         <Stack className="nav" gap={10}>
-            <div className="m-0 nav-items">
+            <div className="d-flex">
+            <Col className="m-0 nav-items">
+                <Col xs='1' sm='1' lg='1' className="p-3">
                 <Link to={'/home'} className="link">
-                <Col xs='1' lg='1' className="p-3">
                     Home
+                </Link>
                 </Col>
-                </Link>
+                    <Col xs='1' sm='1' lg='1' className="p-3">
                 <Link to={'/profile'} className="link">
-                    <Col xs='1' lg='1' className="p-3">
                         Profile
-                    </Col>
                 </Link>
-            </div>
+                    </Col>
+            </Col>
             {/* <div className="nav_logo">
                 <img src={Mylogo} onClick={Dashboard} width='120' style={{cursor:"pointer"}}></img>
             </div> */}
+            <div>
             {!Id ?
             <div className="nav-buttons">
                 {users ? 
@@ -72,6 +73,8 @@ function NavBar() {
                     </div>
                 }
             </div> : '' }
+            </div>
+            </div>
         </Stack>
         : '' }
         
