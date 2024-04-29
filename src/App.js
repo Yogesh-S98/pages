@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     BrowserRouter,
     Routes,
@@ -9,14 +9,17 @@ import "./App.scss";
 import Home from "./pages/landingpages/home";
 import { ProtectRoute, ProtectRoute2 } from "./Auth";
 import { ToastContainer } from 'react-toastify';
+import Profile from "./common/profile";
+import NavBar from "./pages/landingpages/navbar";
 
 
 function App() {
         return (
-          <div>
+          <div className="App">
           <BrowserRouter>
+              <NavBar></NavBar>
             <Routes>
-            <Route path="/" element={
+                <Route path="/" element={
                   <ProtectRoute2>
                   <Login/>
                   </ProtectRoute2>
@@ -29,6 +32,12 @@ function App() {
                 <Route path="/home" element={
                   <ProtectRoute>
                     <Home/>
+                  </ProtectRoute>
+                }>
+                </Route>
+                <Route path="/profile/:id" element={
+                  <ProtectRoute>
+                    <Profile/>
                   </ProtectRoute>
                 }>
                 </Route>

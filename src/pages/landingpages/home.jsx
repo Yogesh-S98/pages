@@ -15,6 +15,9 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import UploadPosts from "./uploadPost/uploadPost";
 import CommentsList from "./uploadPost/commentsList";
+import Loading from "../../common/loading";
+import { json } from "react-router-dom";
+import ProfileAvatar from "../../common/profileAvatar";
 // import { json } from "react-router-dom";
 
 
@@ -24,13 +27,13 @@ function Home() {
     const [commentList, setCommentList] = useState([]);
     const [list, setList] = useState([]);
     const [loading, setloading] = useState(true);
+    const [imageload, setImageload] = useState(false);
     const [show, setShow] = useState(false);
     const [showComment, setShowComment] = useState(false);
     const [comment, setComment] = useState('');
     const [Idpost, setIdpost] = useState('');
     const commentsCom = useRef(null);
     const openComment = (value) => {
-        setloading(true);
         setShowComment(true);
         commentapi(value);
     };
@@ -100,10 +103,7 @@ function Home() {
             <div style={{padding: '10px', display: 'flex', justifyContent: 'center'}}>
             <Col xs lg='6' className="images-container">
                 <div style={{display: 'block'}}>
-                <div style={{display: 'flex'}}>
-                    <img className="post-userlogo" alt="profile" src={item.user.photoURL} width={30}/>
-                    <div className="post-user">{item.user.displayName}</div>
-                </div>
+                <ProfileAvatar data={item}></ProfileAvatar>
                 <img className="post-image" alt="post" src={item.file} style={{width: '100%'}} />
                 {item.message.length > 0 ? <div className="post-description">
                     {item.message}
@@ -124,7 +124,10 @@ function Home() {
                     <div style={{ paddingLeft: '5px', paddingTop: '2px' }}>{
                      item.likes === 'under' ? '' : item.likes.filter((x) => x.like).length === 0
                         ? '' : item.likes.filter((x) => x.like).length}</div>
-                    <div className="comments-div" onClick={() => openComment(item.id)}>
+                    <div
+                        style={{ cursor: 'pointer' }}
+                        className="comments-div"
+                        onClick={() => openComment(item.id)}>
                         <img src={message} alt="comment" width={20} />
                     </div>
                 </div>
@@ -134,8 +137,11 @@ function Home() {
         )
     }
     const Submit = async (file) => {
+        setImageload(true);
         const result = await savePosts({ name, file });
+        console.log('daf', result);
         if (result) {
+            setImageload(false);
             setname('');
             setShow(false);
             load();
@@ -154,18 +160,19 @@ function Home() {
     //     )
     // }
     if (loading) {
-        return <div>'loading'</div>;
+        return <div>
+            <Loading height={'100vh'}></Loading>
+        </div>;
     }
     return (
         <div>
-            <NavBar></NavBar>
             <Container fluid='sm' className="home-container">
                 <div className="heading">
                     Welcome to pages
                 </div>
                 <div>
                     <div>
-                        <Modal size="lg" show={show} className="upload-container">
+                        <Modal size="lg" show={show}>
                             <Modal.Header style={{display: 'flex', justifyContent: 'space-between'}}>
                                 <Modal.Title>
                                     Upload Post
@@ -176,10 +183,13 @@ function Home() {
                                         onClick={closeModal}>X</div>
                             </Modal.Header>
                             <Modal.Body>
-                                <UploadPosts
+                                { !imageload ?
+                                <div><UploadPosts
                                     submitPost={Submit}
                                 >
-                                </UploadPosts>
+                                </UploadPosts></div>
+                                    : <Loading></Loading> }
+                                
                             </Modal.Body>
                         </Modal>
                         <Modal size="lg" show={showComment} className="comments-container">
@@ -193,7 +203,7 @@ function Home() {
                                         onClick={closeComment}>X</div>
                             </Modal.Header>
                             <Modal.Body>
-                                { loading ? (<p>loading ...</p>) :
+                                { loading ? <Loading></Loading> :
                                 <div>
                                     <div>
                                     {/* {commentList ? commentList.map((item) => renderComment(item)) : ''} */}

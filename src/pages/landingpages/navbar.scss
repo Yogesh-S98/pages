@@ -7,6 +7,20 @@
         display: flex;
         justify-content: flex-end;
     }
+    .nav-items {
+        font-weight: 600;
+        font-size: 18px;
+        color: #8066ff;
+        display: flex;
+    }
+}
+@media (max-width: 600px) {
+    .nav {
+        height: fit-content !important;
+    }
+    .nav-items {
+        display: block !important;
+    }
 }
 .nav_logo{
     padding-left: 40px;

@@ -55,7 +55,9 @@ export const signInWithGoogle = async () => {
             });
         }
         successNotification('Login successfully');
-        return user;
+        const result = docs.docs.map((data) => data.data())[0];
+        localStorage.setItem('user', JSON.stringify(result));
+        return result;
     } catch (err) {
         errorNotification('error');
         console.error(err);
@@ -88,6 +90,12 @@ export const getComments = async (value) => {
 
 export const updateComment = async (value, id) => {
     const docRef = doc(db, "comments", id);
+    await updateDoc(docRef, value);
+    return docRef;
+};
+
+export const addReplyComment = async (value) => {
+    const docRef = doc(db, 'comments', value.id);
     await updateDoc(docRef, value);
     return docRef;
 }
@@ -150,6 +158,22 @@ export const getDetails = async (value) => {
         ...doc.data()
     }))
     return que[0];
+}
+
+export const updateUser = async (value) => {
+    const docRef = await getDocs(query(collection(db, "users"),
+        where("uid", "==", value.uid)));
+    try {
+        const docGet = doc(db, 'users', docRef.docs[0].id);
+        await updateDoc(docGet, value);
+        successNotification('Updated Details');
+        const result = (await getDoc(docGet)).data();
+        return result;
+    } catch (error) {
+        errorNotification(error);
+        console.error(error);
+        return error;
+    }
 }
 
 export const getPost = async (postId) => {

@@ -9,7 +9,7 @@ function Login() {
     // const [value,setValue] = useState('');
     const handleGoogleSingIn = async () => {
         const user = await signInWithGoogle();
-        localStorage.setItem('user', JSON.stringify(user));
+        // localStorage.setItem('user', JSON.stringify(user));
         if (user) {
           Navigate('/home');
         }
