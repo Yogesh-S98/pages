@@ -4,4 +4,33 @@
     color: #8066ff;
     text-decoration: none;
   }
+  .cursor-pointer {
+    cursor: pointer;
+  }
+  .input-field {
+    background-color: transparent !important;
+    border: 1px solid #dedede !important;
+  }
+  .input-label {
+    color: #505050;
+  }
+  .dropdown-button {
+    background-color: white;
+    color: #8066ff;
+    border: none;
+    padding: 0px;
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+  .dropdown-item:active {
+    background-color: #8066ff;
+  }
+  .dropdown-item {
+    .link {
+      color: black !important;
+    }
+    .link:active {
+      color: white !important;
+    }
+  }
 }

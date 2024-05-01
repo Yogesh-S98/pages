@@ -33,7 +33,7 @@ class ProfileAvatar extends Component {
                 {userProfile ? (
                     <div>
                         <Link to={`/profile/${userProfile.uid}`} style={{ textDecoration: 'none', color: 'black' }}>
-                        <img style={{borderRadius: '50px'}} src={userProfile.avatar} alt="User Avatar" width={30} />
+                        <img style={{borderRadius: '50px'}} src={userProfile.avatar} alt="User Avatar" width={30} height={30} />
                         <span style={{paddingLeft: '10px', fontWeight: 600}}>{userProfile.name}</span>
                         </Link>
                     </div>

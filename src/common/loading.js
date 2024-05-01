@@ -1,6 +1,6 @@
 import React from 'react';
 import './loading.scss';
-import loadingGif from '../assets/1481.gif';
+import loadingGif from '../assets/loader.gif';
 import { Component } from 'react';
 import NavBar from '../pages/landingpages/navbar';
 
@@ -23,11 +23,11 @@ class Loading extends Component {
   render () {
     // const { isloading } = this.state;
     return (
-      <div className="loading" style={{ height: this.props.height }}>
+      <div className="loading" >
         {/* {
           isloading ? <img src={loadingGif} /> : ''
         } */}
-        <img src={loadingGif} />
+        <img src={loadingGif} className='loading-gif' />
       </div>
     );
   }

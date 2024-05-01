@@ -160,11 +160,21 @@ export const getDetails = async (value) => {
 }
 
 export const updateUser = async (value) => {
+    const payload = value.user;
+    if (value.file) {
+        const updatepic = ref(storage, `/profiles/${user.uid}/${value.profile.file.name}`);
+        await uploadBytes(updatepic, value.profile.file);
+        const downloadURL = await getDownloadURL(updatepic);
+        payload.avatar = downloadURL;
+    }
+    if (value.profile.name) {
+        payload.name = value.profile.name;
+    }
     const docRef = await getDocs(query(collection(db, "users"),
-        where("uid", "==", value.uid)));
+        where("uid", "==", value.user.uid)));
     try {
         const docGet = doc(db, 'users', docRef.docs[0].id);
-        await updateDoc(docGet, value);
+        await updateDoc(docGet, payload);
         successNotification('Updated Details');
         const result = (await getDoc(docGet)).data();
         return result;

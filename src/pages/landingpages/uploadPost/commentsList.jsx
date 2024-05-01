@@ -9,7 +9,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import './comments.scss';
-import Loading from "../../../common/loading";
+import Loader from "../../../common/loader";
 
 class CommentsList extends Component {
     constructor(props) {
@@ -24,6 +24,7 @@ class CommentsList extends Component {
             replycomment: '',
             showMoreComments: 5,
             showReplyMore: 2,
+            loading: false,
         }
         this.renderlist = this.renderlist.bind(this);
         this.renderEdit = this.renderEdit.bind(this);
@@ -39,8 +40,9 @@ class CommentsList extends Component {
     }
 
     async componentDidMount() {
+        this.setState({ loading: true });
         setTimeout(() => {
-            this.setState({ comments: this.props.data });
+            this.setState({ comments: this.props.data, loading: false });
             console.log('dafas', this.props.data);
         }, 1000);
     }
@@ -266,12 +268,14 @@ class CommentsList extends Component {
     }
 
     render() {
-        const { editcomment, showMoreComments, comments } = this.state;
+        const { editcomment, showMoreComments, comments, loading } = this.state;
         return (
             <div style={{ padding: '20px' }}>
-                {comments
-                    ? <div>
+                 {loading && !comments && <Loader></Loader>}
+                    {comments ? <div>
+                        <div style={{ overflowY: comments.length > 5 ? 'scroll' : '', height: '500px' }}>
                         {comments.slice(0, showMoreComments).map(this.renderlist)}
+                        </div>
                         {showMoreComments < comments.length && (
                             <div>
                             <div
@@ -282,8 +286,8 @@ class CommentsList extends Component {
                             </div>
                             </div>
                         )}
-                      </div>
-                        : <Loading></Loading>}
+                      </div> : ''}
+                
                 {/* <Modal size="lg" show={this.state.commentEdit} className="upload-container">
                     <Modal.Header style={{display: 'flex', justifyContent: 'space-between'}}>
                         <Modal.Title>

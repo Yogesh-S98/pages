@@ -54,7 +54,9 @@ function Home() {
     const load = async () => {
         getSavePosts().then(results => {
             setList(results);
-            setloading(false);
+            setTimeout(() => {
+                setloading(false);
+            }, 3000);
         });
         return;
     }
@@ -159,13 +161,14 @@ function Home() {
     //         </div>
     //     )
     // }
-    if (loading) {
-        return <div>
-            <Loading height={'100vh'}></Loading>
-        </div>;
-    }
+    // if (loading) {
+    //     return <div>
+    //         <Loading height={'100vh'}></Loading>
+    //     </div>;
+    // }
     return (
         <div>
+            { loading && <Loading ></Loading> }
             <Container fluid='sm' className="home-container">
                 <div className="heading">
                     Welcome to pages
@@ -203,7 +206,6 @@ function Home() {
                                         onClick={closeComment}>X</div>
                             </Modal.Header>
                             <Modal.Body>
-                                { loading ? <Loading></Loading> :
                                 <div>
                                     <div>
                                     {/* {commentList ? commentList.map((item) => renderComment(item)) : ''} */}
@@ -230,7 +232,7 @@ function Home() {
                                     </InputGroup>
                                     </div>
                                 </div>
-                                }
+                                
                             </Modal.Body>
                         </Modal>
                     </div>
