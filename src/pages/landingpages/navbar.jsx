@@ -7,7 +7,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import '../landingpages/navbar.scss';
 import Stack from 'react-bootstrap/Stack';
 import ProfileAvatar from "../../common/profileAvatar";
-import { Col, Row } from "react-bootstrap";
+import { Col, Dropdown, Row } from "react-bootstrap";
 // const { Item } = Menu;
 
 function NavBar() {
@@ -55,12 +55,13 @@ function NavBar() {
             <div>
             {!Id ?
             <div className="nav-buttons">
-                {users ? 
-                    <div className='nav_right' onClick={() => showMenu(!menu)}>
-                        <div className="fw-bolder fs-6">{users?users.name:'User Name'}</div>
-                        <img src={users.avatar} alt="Avatar" className="avatar"></img>
-                    </div> : '' }
-                {
+                {users ? ''
+                    // <div className='nav_right' onClick={() => showMenu(!menu)}>
+                    //     <div className="fw-bolder fs-6">{users?users.name:'User Name'}</div>
+                    //     <img src={users.avatar} alt="Avatar" className="avatar"></img>
+                    // </div>
+                     : '' }
+                {/* {
                     menu && <div className='actions'>
                         <div className="action">
                             <Link
@@ -71,8 +72,29 @@ function NavBar() {
                         </div>
                         <div className="action" onClick={logout}>&nbsp;&nbsp;Logout</div>
                     </div>
-                }
-            </div> : '' }
+                } */}
+                <Dropdown>
+                    <Dropdown.Toggle className="dropdown-button">
+                    {users ?
+                    <div className='d-flex' onClick={() => showMenu(!menu)}>
+                        <div className="fw-bolder fs-6">{users?users.name:'User Name'}</div>
+                        <img src={users.avatar} alt="Avatar" className="avatar"></img>
+                    </div>
+                     : '' }
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                        <Dropdown.Item className="dropdown-item">
+                            <Link
+                                to={`/profile/${users.uid}`}
+                                className="link">
+                                Settings
+                            </Link>
+                        </Dropdown.Item>
+                        <Dropdown.Item className="dropdown-item" onClick={logout}>Logout</Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
+            </div>
+             : '' }
             </div>
             </div>
         </Stack>
