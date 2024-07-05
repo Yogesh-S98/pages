@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 // import {getStorage, ref} from 'firebase/storage';
-import {getAuth, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
+import {createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
 
 import {
     getFirestore,
@@ -39,8 +39,13 @@ export const storage = getStorage(app);
 
 const provider = new GoogleAuthProvider();
 
+// export const signUpwithForm = async ({ email, password }) => {
+//    const res = await createUserWithEmailAndPassword(auth, email, password);
+//    console.log('dsfasf', res);
+//    return res;
+// }
+
 export const signInWithGoogle = async () => {
-    try {
         const res = await signInWithPopup(auth, provider);
         const user = res.user;
         const q = query(collection(db, "users"), where("uid", "==", user.uid));
@@ -54,15 +59,8 @@ export const signInWithGoogle = async () => {
                 avatar: user.photoURL
             });
         }
-        successNotification('Login successfully');
         const result = docs.docs.map((data) => data.data())[0];
         return result;
-    } catch (err) {
-        errorNotification('error');
-        console.error(err);
-        // show toaster
-        return err;
-    }
 };
 
 export const saveComment = async ({ postId, comment, userId }) => {
