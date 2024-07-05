@@ -16,9 +16,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import UploadPosts from "./uploadPost/uploadPost";
 import CommentsList from "./uploadPost/commentsList";
 import Loading from "../../common/loading";
-import { json } from "react-router-dom";
 import ProfileAvatar from "../../common/profileAvatar";
-// import { json } from "react-router-dom";
 
 
 function Home() {

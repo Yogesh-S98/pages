@@ -5,7 +5,8 @@ import Loading from "./loading";
 import { Col, FloatingLabel, Modal } from "react-bootstrap";
 import { InputGroup, Form, Button } from "react-bootstrap";
 import edit from '../assets/pencil.svg';
-import NavBar from "../pages/landingpages/navbar";
+// import NavBar from "../pages/landingpages/navbar";
+// import ProfileAvatar from "./profileAvatar";
 
 
 function withParams(Component) {
@@ -126,18 +127,22 @@ class Profile extends React.Component {
                     style={{ display: 'none' }} // Hide the input
                     ref={this.inputRef} // Reference to the input element
                 />
-                <Col lg='2'>
+                <Col lg='2' className="rounded-div">
+                  <div style={{ display: 'inline-block', position: 'relative' }}>
                   <img
                     className="rounded-circle"
                     src={userProfile.avatar}
                     alt="setting-prf" width={100} height={100} />
                     <div
-                      className="d-flex justify-content-end">
-                      <div style={{ paddingRight: '30px', marginTop: '-30px' }}>
+                      style={{ position: 'absolute',
+                      bottom: '4%',
+                      right: '10%' }}>
+                      <div>
                         <img 
                           className="cursor-pointer"
                           onClick={this.uploadProfile} src={edit} width={25}/>
                       </div>
+                    </div>
                     </div>
                 </Col>
                     <Col lg='8' className="p-2 pt-4">
