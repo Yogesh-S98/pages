@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import NavBar from "./navbar";
 import './home.scss';
+import loadingGif from '../../assets/loader.gif';
 
 import likeUrl from '../../assets/heart.png';
 import redlikeUrl from '../../assets/redheart.png';
 import message from '../../assets/messages.png';
-import { addLikes, getComments, getPost, getSavePosts, saveComment, saveLike, savePosts } from "../../googleSignIn/config";
+import deleteIcon from '../../assets/delete.png';
+import { addLikes, getComments, getPost, getSavePosts, removePost, saveComment, saveLike, savePosts } from "../../googleSignIn/config";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -89,8 +91,13 @@ function Home() {
         const array = list.likes.map((d) => {
             return d;
         })
-        array.push({ postId: item, like: value, userId: userId })
+        array.push({ postId: item, like: value, userId: userId });
         await addLikes({ likes: array, postId: item });
+        load();
+    }
+    const removeLike = async (item, list) => {
+        const filterLikes = list.likes.filter((d) => d.userId !== userId);
+        await addLikes({ likes: filterLikes, postId: item });
         load();
     }
     useEffect(()=> {
@@ -99,12 +106,23 @@ function Home() {
         load();
     }, []);
     const renderList = (item) => {
+        console.log('vide', item.video)
         return (
             <div style={{padding: '10px', display: 'flex', justifyContent: 'center'}}>
             <Col xs lg='6' className="images-container">
                 <div style={{display: 'block'}}>
                 <ProfileAvatar data={item}></ProfileAvatar>
-                <img className="post-image" alt="post" src={item.file} style={{width: '100%'}} />
+                {item.video && (
+                    <video style={{width: '100%'}} controls autoPlay>
+                        <source src={item.file} type="video/mp4" />
+                    </video>
+                )
+                }
+                {
+                    !item.video && (
+                        <img className="post-image" alt="post" src={item.file} style={{width: '100%'}} />
+                    )
+                }
                 {item.message.length > 0 ? <div className="post-description">
                     {item.message}
                 </div> : ''}
@@ -116,7 +134,7 @@ function Home() {
                         item.likes.filter((d) => d.like === true && d.userId === userId)
                         .map((d) => (
                             <div>
-                                <img alt="redlike" src={redlikeUrl} onClick={() => addLike(d.postId, false, item)}  width={20} />
+                                <img alt="redlike" src={redlikeUrl} onClick={() => removeLike(d.postId, item)}  width={20} />
                             </div>
                         )) : <img alt="likeadd" src={likeUrl} onClick={() => addLike(item.id, true, item)}  width={20} />
                     }
@@ -130,6 +148,17 @@ function Home() {
                         onClick={() => openComment(item.id)}>
                         <img src={message} alt="comment" width={20} />
                     </div>
+                    <div>
+                        {
+                            userId === item.userId ? 
+                            <img
+                                onClick={() => removePosts(item)}
+                                className="delete-icon"
+                                src={deleteIcon}
+                                alt="delete"
+                                width={20} /> : ''
+                        }
+                    </div>
                 </div>
                 </div>
             </Col>
@@ -138,7 +167,7 @@ function Home() {
     }
     const Submit = async (file) => {
         setImageload(true);
-        const result = await savePosts({ name, file });
+        const result = await savePosts({ name, file, video: file.type === 'video/mp4' });
         console.log('daf', result);
         if (result) {
             setImageload(false);
@@ -146,6 +175,14 @@ function Home() {
             setShow(false);
             load();
         }
+    }
+    const removePosts = async (item) => {
+        const removeObject = {
+            userId: item.userId,
+            postId: item.id
+        }
+        await removePost(removeObject);
+        load();
     }
     // const renderComment = (item) => {
     //     return (
@@ -189,7 +226,9 @@ function Home() {
                                     submitPost={Submit}
                                 >
                                 </UploadPosts></div>
-                                    : <Loading></Loading> }
+                                : <Col style={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
+                                <img src={loadingGif} className='loading-gif' />
+                                </Col> }
                                 
                             </Modal.Body>
                         </Modal>

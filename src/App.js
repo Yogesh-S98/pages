@@ -11,6 +11,7 @@ import { ProtectRoute, ProtectRoute2 } from "./Auth";
 import { ToastContainer } from 'react-toastify';
 import Profile from "./common/profile";
 import NavBar from "./pages/landingpages/navbar";
+import Chat from "./pages/landingpages/chat";
 
 
 function App() {
@@ -38,6 +39,12 @@ function App() {
                 <Route path="/profile/:id" element={
                   <ProtectRoute>
                     <Profile/>
+                  </ProtectRoute>
+                }>
+                </Route>
+                <Route path="/chat" element={
+                  <ProtectRoute>
+                    <Chat/>
                   </ProtectRoute>
                 }>
                 </Route>
