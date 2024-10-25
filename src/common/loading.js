@@ -23,7 +23,7 @@ class Loading extends Component {
   render () {
     // const { isloading } = this.state;
     return (
-      <div className="loading" >
+      <div className="loading" style={{ width: this.props.width }}>
         {/* {
           isloading ? <img src={loadingGif} /> : ''
         } */}

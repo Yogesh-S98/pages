@@ -31,9 +31,15 @@
 .button {
     cursor: pointer;
     padding: 10px;
+    color: black;
     background: white;
     border-radius: 30px;
     border: 1px solid #dedede;
+}
+.btn:hover {
+    color: black;
+    background-color: white;
+    border-color: #dedede;
 }
     .line {
         flex: 1;

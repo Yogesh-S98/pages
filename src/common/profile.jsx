@@ -122,7 +122,7 @@ class Profile extends React.Component {
                   className="p-2 border border-#dedede rounded-2">
                     <input
                     type="file"
-                    accept="image/png, image/jpeg"
+                    accept="image/*"
                     onChange={this.handleFileChange}
                     style={{ display: 'none' }} // Hide the input
                     ref={this.inputRef} // Reference to the input element

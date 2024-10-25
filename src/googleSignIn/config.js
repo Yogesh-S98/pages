@@ -12,6 +12,10 @@ import {
     updateDoc,
     where,
     getDoc,
+    deleteDoc,
+    orderBy,
+    onSnapshot,
+    serverTimestamp,
 } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { errorNotification, successNotification } from "../common/notification";
@@ -46,6 +50,7 @@ const provider = new GoogleAuthProvider();
 // }
 
 export const signInWithGoogle = async () => {
+    try {
         const res = await signInWithPopup(auth, provider);
         const user = res.user;
         const q = query(collection(db, "users"), where("uid", "==", user.uid));
@@ -60,7 +65,12 @@ export const signInWithGoogle = async () => {
             });
         }
         const result = docs.docs.map((data) => data.data())[0];
+        successNotification('Loing Successfully');
         return result;
+    } catch (error) {
+        console.log(error);
+        errorNotification('Error login');
+    }
 };
 
 export const saveComment = async ({ postId, comment, userId }) => {
@@ -98,7 +108,7 @@ export const addReplyComment = async (value) => {
 }
 
 const user = JSON.parse(localStorage.getItem('user'));
-export const savePosts = async ({ name, file }) => {
+export const savePosts = async ({ name, file, video }) => {
     try {
         const uploadFile = ref(storage, `/images/${user.uid}/${file.name}`);
         const docResult = await uploadBytes(uploadFile, file);
@@ -109,10 +119,24 @@ export const savePosts = async ({ name, file }) => {
             name: file.name,
             likes: 'under',
             file: downloadURL,
+            video: video,
             message: '',
+            createdAt: serverTimestamp()
         });
         successNotification('Post Uploaded');
         return docResult;
+    } catch (error) {
+        errorNotification(error);
+        console.error(error);
+        return error;
+    }
+}
+
+export const removePost = async (item) => {
+    try {
+        const result = await deleteDoc(doc(db, 'files', item.postId));
+        successNotification('Successfully deleted Post');
+        return result;
     } catch (error) {
         errorNotification(error);
         console.error(error);
@@ -219,10 +243,20 @@ export const addLikes = async ({ likes, postId }) => {
 
 export const getSavePosts = async () => {
     // const userId = user.uid;
-    const q = query(collection(db, "files"));
-    // const q = query(collection(db, "files"), where("userId", "==", userId));
+    // const q = query(collectionRef);
+    const collectionRef = collection(db, "files");
+    const q = query(collectionRef, orderBy("createdAt", "desc"));
     const querySnapshot = await getDocs(q);
+    // console.log('adfa', querySnapshot);
     return querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+    // onSnapshot(q, (snapshot) => {
+    //     const data = snapshot.docs.map((doc) => ({
+    //       id: doc.id,
+    //       ...doc.data()
+    //     }));
+    //     console.log('ddddd', data);
+    // });
+    // return '';
 }
 
 // export const getSaved = async ({ name }) => {

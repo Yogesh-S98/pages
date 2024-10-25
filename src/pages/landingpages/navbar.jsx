@@ -39,15 +39,20 @@ function NavBar() {
             <div className="d-flex">
             <Col className="m-0 nav-items">
                 <Col xs='1' sm='1' lg='1' className="p-3">
-                <Link to={'/home'} className="link">
-                    Home
-                </Link>
+                    <Link to={'/home'} className="link">
+                        Home
+                    </Link>
                 </Col>
-                    <Col xs='1' sm='1' lg='1' className="p-3">
-                <Link to={'/profile'} className="link">
+                <Col xs='1' sm='1' lg='1' className="p-3">
+                    <Link to={'/profile'} className="link">
                         Profile
-                </Link>
-                    </Col>
+                    </Link>
+                </Col>
+                <Col xs='1' sm='1' lg='1' className="p-3">
+                    <Link to={'/chat'} className="link">
+                        Chat
+                    </Link>
+                </Col>
             </Col>
             {/* <div className="nav_logo">
                 <img src={Mylogo} onClick={Dashboard} width='120' style={{cursor:"pointer"}}></img>

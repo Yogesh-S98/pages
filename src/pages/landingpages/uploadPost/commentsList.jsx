@@ -273,7 +273,7 @@ class CommentsList extends Component {
             <div style={{ padding: '20px' }}>
                  {loading && !comments && <Loader></Loader>}
                     {comments ? <div>
-                        <div style={{ overflowY: comments.length > 5 ? 'scroll' : '', height: '500px' }}>
+                        <div style={{ overflowY: comments.length > 5 ? 'scroll' : '' }}>
                         {comments.slice(0, showMoreComments).map(this.renderlist)}
                         </div>
                         {showMoreComments < comments.length && (
