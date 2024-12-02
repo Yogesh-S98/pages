@@ -4,6 +4,7 @@ import { Col, Row } from "react-bootstrap";
 import { json } from "react-router-dom";
 import ProfileAvatar from "../../../common/profileAvatar";
 import close from '../../../assets/close1437.jpg';
+import noComments from '../../../assets/no-message.png';
 import Modal from 'react-bootstrap/Modal';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
@@ -248,9 +249,9 @@ class CommentsList extends Component {
         )
     }
 
-    renderlist = item => {
+    renderlist = (item, index) => {
         return (
-            <div>
+            <div key={index}>
                 <Col style={{ display: 'flex' }}>
                 <div>
                 <ProfileAvatar data={item}></ProfileAvatar>
@@ -271,22 +272,36 @@ class CommentsList extends Component {
         const { editcomment, showMoreComments, comments, loading } = this.state;
         return (
             <div style={{ padding: '20px' }}>
-                 {loading && !comments && <Loader></Loader>}
-                    {comments ? <div>
-                        <div style={{ overflowY: comments.length > 5 ? 'scroll' : '' }}>
-                        {comments.slice(0, showMoreComments).map(this.renderlist)}
+                    {loading ? (
+    <Loader />
+) : (
+    <div>
+        {comments && comments.length > 0 ? (
+            <div>
+                <div style={{ overflowY: comments.length > 5 ? 'scroll' : '' }}>
+                    {comments.slice(0, showMoreComments).map(this.renderlist)}
+                </div>
+                {showMoreComments < comments.length && (
+                    <div>
+                        <div
+                            className="ps-3 pt-2"
+                            style={{ cursor: 'pointer', fontWeight: 600 }}
+                            onClick={this.handleShowmore}>
+                            Show More
                         </div>
-                        {showMoreComments < comments.length && (
-                            <div>
-                            <div
-                                className="ps-3 pt-2"
-                                style={{ cursor: 'pointer', fontWeight: 600 }}
-                                onClick={this.handleShowmore}>
-                                Show More
-                            </div>
-                            </div>
-                        )}
-                      </div> : ''}
+                    </div>
+                )}
+            </div>
+        ) : (
+            <Col className="text-center">
+                <div>
+                    <img src={noComments} width={30} />
+                </div>
+                No comments
+            </Col>
+        )}
+    </div>
+)}
                 
                 {/* <Modal size="lg" show={this.state.commentEdit} className="upload-container">
                     <Modal.Header style={{display: 'flex', justifyContent: 'space-between'}}>

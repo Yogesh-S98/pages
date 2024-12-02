@@ -108,10 +108,10 @@ export const addReplyComment = async (value) => {
 }
 
 const user = JSON.parse(localStorage.getItem('user'));
-export const savePosts = async ({ name, file, video }) => {
+export const savePosts = async (file) => {
     try {
         const uploadFile = ref(storage, `/images/${user.uid}/${file.name}`);
-        const docResult = await uploadBytes(uploadFile, file);
+        const docResult = await uploadBytes(uploadFile, file.file);
         const downloadURL = await getDownloadURL(uploadFile);
         await addDoc(collection(db, "files"), {
             userId: user.uid,
@@ -119,8 +119,8 @@ export const savePosts = async ({ name, file, video }) => {
             name: file.name,
             likes: 'under',
             file: downloadURL,
-            video: video,
-            message: '',
+            video: file.video,
+            message: file.note,
             createdAt: serverTimestamp()
         });
         successNotification('Post Uploaded');
