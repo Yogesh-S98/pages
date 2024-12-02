@@ -29,6 +29,8 @@ function Home() {
     const [loading, setloading] = useState(true);
     const [imageload, setImageload] = useState(false);
     const [show, setShow] = useState(false);
+    const [postDelete, setPostDelete] = useState(false);
+    const [deleteObj, setDeleteObj] = useState({});
     const [showComment, setShowComment] = useState(false);
     const [comment, setComment] = useState('');
     const [Idpost, setIdpost] = useState('');
@@ -46,7 +48,10 @@ function Home() {
     }
     const closeComment = () => setShowComment(false);
     const openModal = () => setShow(true);
-    const closeModal = () => setShow(false);
+    const closeModal = () => {
+        setShow(false);
+    };
+    const closeDeleteModal = () => setPostDelete(false);
     const updateComment = (event) => {
         setComment(event.target.value);
         console.log('dadf', event);
@@ -105,10 +110,11 @@ function Home() {
         setUserId(user.uid);
         load();
     }, []);
-    const renderList = (item) => {
-        console.log('vide', item.video)
+    const renderList = (item, index) => {
         return (
-            <div style={{padding: '10px', display: 'flex', justifyContent: 'center'}}>
+            <div
+                key={index}
+                style={{padding: '10px', display: 'flex', justifyContent: 'center'}}>
             <Col xs lg='6' className="images-container">
                 <div style={{display: 'block'}}>
                 <ProfileAvatar data={item}></ProfileAvatar>
@@ -167,8 +173,13 @@ function Home() {
     }
     const Submit = async (file) => {
         setImageload(true);
-        const result = await savePosts({ name, file, video: file.type === 'video/mp4' });
-        console.log('daf', result);
+        const payload = {
+            name: file.file.name,
+            file: file.file,
+            video: file.file.type === 'video/mp4',
+            note: file.note
+        }
+        const result = await savePosts(payload);
         if (result) {
             setImageload(false);
             setname('');
@@ -177,12 +188,31 @@ function Home() {
         }
     }
     const removePosts = async (item) => {
+        setPostDelete(true);
+        // const removeObject = {
+        //     userId: item.userId,
+        //     postId: item.id
+        // }
+        setDeleteObj(item);
+        // await removePost(removeObject);
+        // load();
+    }
+    const deletePost = async (item) => {
         const removeObject = {
             userId: item.userId,
             postId: item.id
         }
-        await removePost(removeObject);
-        load();
+        setPostDelete(false);
+        setDeleteObj({});
+        await removePost(removeObject).then((res) => {
+            setPostDelete(false);
+            setDeleteObj({});
+            load();
+        }).catch((error) => {
+            setPostDelete(false);
+            setDeleteObj({}); 
+            load();
+        });
     }
     // const renderComment = (item) => {
     //     return (
@@ -270,6 +300,37 @@ function Home() {
                                     </div>
                                 </div>
                                 
+                            </Modal.Body>
+                        </Modal>
+                        <Modal
+                            dialogClassName="modal-50w"
+                            show={postDelete}>
+                            <Modal.Header style={{display: 'flex', justifyContent: 'space-between'}}>
+                                <Modal.Title>
+                                    Delete Post
+                                </Modal.Title>
+                                    <div
+                                        style={{fontSize: '18px',fontWeight: 600,
+                                            color: '#919090', cursor: 'pointer'}}
+                                        onClick={closeDeleteModal}>X</div>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <div>
+                                {deleteObj.video && (
+                                    <video style={{width: '100%'}} controls autoPlay>
+                                        <source src={deleteObj.file} type="video/mp4" />
+                                    </video>
+                                )
+                                }
+                                {
+                                    !deleteObj.video && (
+                                        <img className="post-image" alt="post" src={deleteObj.file} style={{width: '100%'}} />
+                                    )
+                                }
+                                    <Col className="pt-2" style={{display: 'flex', justifyContent: 'flex-end'}}>
+                                        <Button onClick={() => deletePost(deleteObj)}>Delete</Button>
+                                    </Col>
+                                </div>
                             </Modal.Body>
                         </Modal>
                     </div>
