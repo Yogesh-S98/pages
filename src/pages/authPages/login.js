@@ -49,7 +49,8 @@ function Login() {
     //   console.log('dfasfa', res);
     // }
     return (
-      <Col className='login-container' xs='10' lg='4'>
+      <div className=''>
+      <Col className='login-container background' xs='10' lg='6'>
           <div className='login-div'>
             { !loading ?
               <div className='block'>
@@ -95,7 +96,8 @@ function Login() {
               </div>
             </Col> }
           </div>
-        </Col>
+      </Col>
+      </div>
     );
 }
 
