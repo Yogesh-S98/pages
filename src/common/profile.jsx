@@ -1,8 +1,9 @@
 import React from "react";
+
 import { useParams } from 'react-router-dom';
 import { getDetails, updateUser } from "../googleSignIn/config";
 import Loading from "./loading";
-import { Col, FloatingLabel, Modal } from "react-bootstrap";
+import { Col, Container, FloatingLabel, Modal } from "react-bootstrap";
 import { InputGroup, Form, Button } from "react-bootstrap";
 import edit from '../assets/pencil.svg';
 // import NavBar from "../pages/landingpages/navbar";
@@ -113,12 +114,16 @@ class Profile extends React.Component {
     render() {
       const { userProfile, users, loading, show, profile } = this.state;
         return (
-          <div>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
             { loading && <Loading></Loading> }
             { userProfile ? 
-              <Col className="p-3">
+            <Container>
+              <div style={{ display: 'flex', justifyContent: 'end' }}>
+              <Col lg="9" className="p-3">
+              <Button onClick={this.back} href="/home">
+                 Back</Button>
                 <Col className="pb-2 h4">Profile</Col>
-                <Col xs='10' lg='5'
+                <Col lg="8"
                   className="p-2 border border-#dedede rounded-2">
                     <input
                     type="file"
@@ -164,7 +169,7 @@ class Profile extends React.Component {
                       </Button>
                       </Col>
                 </Col>
-                <Modal size="lg" show={show}>
+                <Modal size="md" show={show}>
                     <Modal.Header style={{display: 'flex', justifyContent: 'space-between'}}>
                         <Modal.Title>
                             Upload Post
@@ -183,6 +188,8 @@ class Profile extends React.Component {
                     </Modal.Footer>
                 </Modal>
               </Col>
+              </div>
+            </Container>
             : '' }
           </div>
         )

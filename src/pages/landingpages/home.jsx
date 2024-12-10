@@ -126,7 +126,7 @@ function Home() {
                 }
                 {
                     !item.video && (
-                        <img className="post-image" alt="post" src={item.file} style={{width: '100%'}} />
+                        <img className="post-image" alt="post" src={item.file} style={{width: '100%', filter: item.filter}} />
                     )
                 }
                 {item.message.length > 0 ? <div className="post-description">
@@ -177,7 +177,8 @@ function Home() {
             name: file.file.name,
             file: file.file,
             video: file.file.type === 'video/mp4',
-            note: file.note
+            note: file.note,
+            filter: file.filter
         }
         const result = await savePosts(payload);
         if (result) {
@@ -240,7 +241,7 @@ function Home() {
                 </div>
                 <div>
                     <div>
-                        <Modal size="lg" show={show}>
+                        <Modal size="md" show={show}>
                             <Modal.Header style={{display: 'flex', justifyContent: 'space-between'}}>
                                 <Modal.Title>
                                     Upload Post
@@ -262,7 +263,7 @@ function Home() {
                                 
                             </Modal.Body>
                         </Modal>
-                        <Modal size="lg" show={showComment} className="comments-container">
+                        <Modal size="md" show={showComment} className="comments-container">
                         <Modal.Header style={{display: 'flex', justifyContent: 'space-between'}}>
                                 <Modal.Title>
                                     Comments
@@ -303,6 +304,7 @@ function Home() {
                             </Modal.Body>
                         </Modal>
                         <Modal
+                            size="md"
                             dialogClassName="modal-50w"
                             show={postDelete}>
                             <Modal.Header style={{display: 'flex', justifyContent: 'space-between'}}>

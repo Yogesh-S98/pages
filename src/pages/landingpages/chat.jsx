@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment-timezone';
+import Crop from './cropImage';
+import CropDemo from './cropImage';
+import ImageCropper from './cropImage';
 
 const timeZones = moment.tz.names();
 // .filter(
@@ -102,7 +105,7 @@ function Chat() {
                 </ul>
                 </div>
             )}
-            
+            <ImageCropper></ImageCropper>
         </div>
     )
 }

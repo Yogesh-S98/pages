@@ -1,0 +1,10 @@
+@media (max-width: 1000px) {
+    .filter-image, .filters {
+        width: 250px !important;
+    }
+}
+@media (min-width: 1001px) {
+    .filter-image, .filters {
+        width: 400px !important;
+    }
+}

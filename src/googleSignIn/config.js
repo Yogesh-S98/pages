@@ -121,6 +121,7 @@ export const savePosts = async (file) => {
             file: downloadURL,
             video: file.video,
             message: file.note,
+            filter: file.filter,
             createdAt: serverTimestamp()
         });
         successNotification('Post Uploaded');
