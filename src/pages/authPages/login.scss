@@ -1,3 +1,12 @@
+.background {
+    background-image: url('../../assets/pages-background.jpg');
+    background-size: cover;
+}
+@media (max-width: 1000px) {
+    .login-container {
+        padding: 50px !important;
+    }
+}
 .login-container {
     height:fit-content;
     position: absolute;
@@ -9,8 +18,8 @@
     margin: auto;
     border: 1px solid #dedede;
     border-radius: 10px;
-    width: 500px;
-    padding: 50px;
+    width: 100%;
+    padding: 100px;
     .login-div {
         display: flex;
         justify-content: center;
