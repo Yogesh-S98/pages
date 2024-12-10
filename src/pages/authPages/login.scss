@@ -1,6 +1,6 @@
 .background {
-    background-image: url('../../assets/pages-background.jpg');
-    background-size: cover;
+    // background-image: url('../../assets/pages-background.jpg');
+    // background-size: cover;
 }
 @media (max-width: 1000px) {
     .login-container {
@@ -19,6 +19,7 @@
     border: 1px solid #dedede;
     border-radius: 10px;
     width: 100%;
+    padding-top: 50px !important;
     padding: 100px;
     .login-div {
         display: flex;

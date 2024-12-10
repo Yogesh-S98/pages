@@ -236,9 +236,7 @@ function Home() {
         <div>
             { loading && <Loading ></Loading> }
             <Container fluid='sm' className="home-container">
-                <div className="heading">
-                    Welcome to pages
-                </div>
+                
                 <div>
                     <div>
                         <Modal size="md" show={show}>
@@ -340,6 +338,11 @@ function Home() {
                     </div>
                     <Row style={{margin: '0px'}}>
                     <Col>
+                    <div style={{fontSize: '3rem',
+                    fontWeight: '800',
+                    color: '#0d6efd', fontFamily: 'math',justifyContent: 'center', display: 'flex'}}>
+                        <Col lg="6">Welcome to pages</Col>
+                    </div>
                     <Col lg='9' style={{display: 'flex', justifyContent: 'flex-end'}}>
                     <Button onClick={openModal}>Upload</Button>
                     </Col>

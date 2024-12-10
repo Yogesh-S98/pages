@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { getDetails, updateUser } from "../googleSignIn/config";
 import Loading from "./loading";
 import { Col, Container, FloatingLabel, Modal } from "react-bootstrap";
@@ -120,8 +120,12 @@ class Profile extends React.Component {
             <Container>
               <div style={{ display: 'flex', justifyContent: 'end' }}>
               <Col lg="9" className="p-3">
-              <Button onClick={this.back} href="/home">
-                 Back</Button>
+              
+                <Link
+                    to={`/home`}
+                    className="link">
+                    Go Back
+                </Link>
                 <Col className="pb-2 h4">Profile</Col>
                 <Col lg="8"
                   className="p-2 border border-#dedede rounded-2">

@@ -60,7 +60,7 @@ function NavBar() {
                     <Dropdown.Toggle className="dropdown-button">
                     {users ?
                     <div className='d-flex' onClick={() => showMenu(!menu)}>
-                        <div className="fw-bolder fs-6">{users?users.name:'User Name'}</div>
+                        <div className="fw-bolder fs-6" style={{paddingTop: '10px'}}>{users?users.name:'User Name'}</div>
                         <img src={users.avatar} alt="Avatar" className="avatar"></img>
                     </div>
                      : '' }

@@ -54,9 +54,16 @@ function Login() {
           <div className='login-div'>
             { !loading ?
               <div className='block'>
-                <div style={{paddingBottom: '20px'}}>
-                  <img src={require('../../assets/loader.gif')} />
-                </div>
+                <div
+                    style={{
+                    fontFamily: 'math',paddingBottom: '40px' }}>
+                      <div style={{fontSize: '3rem',
+                    fontWeight: '800',
+                    color: '#0d6efd'}}>
+                        Turn your stories into art with filters on <i>"Pages".</i></div>
+                    <div style={{fontSize: '2rem',
+                    fontWeight: '800',}}>Just chill and let the filters do the magic!</div>
+                    </div>
                 {/* <div className='sub-heading'>Login</div> */}
                 <Button
                   onClick={handleGoogleSingIn} className='button'>
@@ -90,9 +97,11 @@ function Login() {
                 </div> */}
               </div>
             : <Col style={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
-              <div>
+              <div >
                 <img src={loadingGif} className='loading-gif' /><br/>
-                Hold on🔥
+                <div style={{fontSize: '3rem',fontFamily: 'math',
+                    fontWeight: '800',
+                    color: '#0d6efd'}}>Hold on🔥</div>
               </div>
             </Col> }
           </div>
