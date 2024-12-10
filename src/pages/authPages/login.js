@@ -53,18 +53,20 @@ function Login() {
           <div className='login-div'>
             { !loading ?
               <div className='block'>
-                <div className='heading'>Pages</div>
-                <div className='sub-heading'>Login</div>
+                <div style={{paddingBottom: '20px'}}>
+                  <img src={require('../../assets/loader.gif')} />
+                </div>
+                {/* <div className='sub-heading'>Login</div> */}
                 <Button
                   onClick={handleGoogleSingIn} className='button'>
                   <img style={{ paddingRight: '5px' }} src={require('../../assets/Logo-google-icon-PNG.png')} width={20}/>Sign in with google
                 </Button>
-                <div style={{ display: 'flex', alignItems: 'center', width: 300 }}>
+                {/* <div style={{ display: 'flex', alignItems: 'center', width: 300 }}>
                   <div style={{ marginRight: '10px' }} className='line'></div>
                   <div>Or</div>
                   <div style={{ marginLeft: '10px' }} className='line'></div>
-                </div>
-                <div className='text-start'>
+                </div> */}
+                {/* <div className='text-start'>
                         <label className="input-label">Email</label>
                         <InputGroup>
                           <Form.Control
@@ -81,10 +83,10 @@ function Login() {
                             onChange={(e) => setPassword(e.target.value)}
                             />
                         </InputGroup>
-                        {/* <Button onClick={createUser()}>
+                        <Button onClick={createUser()}>
                           Login
-                        </Button> */}
-                </div>
+                        </Button>
+                </div> */}
               </div>
             : <Col style={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
               <div>
