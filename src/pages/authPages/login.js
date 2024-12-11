@@ -57,9 +57,7 @@ function Login() {
                 <div
                     style={{
                     fontFamily: 'math',paddingBottom: '40px' }}>
-                      <div style={{fontSize: '3rem',
-                    fontWeight: '800',
-                    color: '#0d6efd'}}>
+                      <div className='heading'>
                         Turn your stories into art with filters on <i>"Pages".</i></div>
                     <div style={{fontSize: '2rem',
                     fontWeight: '800',}}>Just chill and let the filters do the magic!</div>

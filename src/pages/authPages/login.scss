@@ -6,6 +6,11 @@
     .login-container {
         padding: 50px !important;
     }
+    .heading {
+        font-size: 30px !important;
+        font-weight: 600 !important;
+
+    }
 }
 .login-container {
     height:fit-content;
@@ -26,6 +31,11 @@
         justify-content: center;
         .block {
             text-align: center;
+        }
+        .heading {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #0d6efd;
         }
     }
     .heading {
