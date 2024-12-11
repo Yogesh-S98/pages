@@ -21,10 +21,10 @@ class UploadPosts extends Component {
             filter: '',
             crop: {
                 unit: "%",
-                width: 30,
-                height: 30,
-                x: 10,
-                y: 10
+                width: 100,
+                height: 100,
+                x: 100,
+                y: 100
             },
             croppedImageUrl: '',
             croppedBlob: null,
@@ -145,6 +145,7 @@ class UploadPosts extends Component {
                     <div>
                         {
                             this.state.imageUrl ? 
+                            this.state.croppedImageUrl ? 
                             <div style={{ display: 'flex' }}>
                                 <div style={{ paddingRight: '10px', paddingBottom: '10px' }}>
                                 <Button  onClick={this.changeImage}>Change</Button>
@@ -153,7 +154,7 @@ class UploadPosts extends Component {
                                 { !this.state.fileType ?
                                 <Button onClick={this.editFilter}>Edit</Button> : '' }
                                 </div>
-                            </div>
+                            </div> : ''
                             :
                             <Button onClick={this.handleClick}>Select Post</Button>
                         }
@@ -191,7 +192,9 @@ class UploadPosts extends Component {
                                 onComplete={this.handleOnCropComplete}
                                 onImageLoaded={this.onImageLoaded}
                             />
+                            <div style={{ display: 'flex', justifyContent: 'start' }}>
                             <Button onClick={this.saveCropImage}>Save</Button>
+                            </div>
                         </div>
                         :
                         <div className="pt-2">

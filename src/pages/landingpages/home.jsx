@@ -113,7 +113,7 @@ function Home() {
     const renderList = (item, index) => {
         return (
             <div
-                key={index}
+                key={item.id}
                 style={{padding: '10px', display: 'flex', justifyContent: 'center'}}>
             <Col xs lg='6' className="images-container">
                 <div style={{display: 'block'}}>
