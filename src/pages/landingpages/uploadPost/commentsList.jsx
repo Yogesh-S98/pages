@@ -100,6 +100,7 @@ class CommentsList extends Component {
         payload.replies = addReply;
         addReplyComment(payload).then(res => {
             if (res) {
+                this.setState({ replycomment: '' })
                 this.setState({ commentReply: false });
             }
         })

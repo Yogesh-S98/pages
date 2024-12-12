@@ -20,6 +20,9 @@ function NavBar() {
         Navigate('/login');
         localStorage.clear();
     }
+    const profile = () => {
+        Navigate(`/profile/${users.uid}`);
+    }
     const Id = params.pathname.split('/')[2];
     const users = JSON.parse(localStorage.getItem('user'));
     useEffect(() => {
@@ -66,12 +69,8 @@ function NavBar() {
                      : '' }
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
-                        <Dropdown.Item className="dropdown-item">
-                            <Link
-                                to={`/profile/${users.uid}`}
-                                className="link">
-                                Settings
-                            </Link>
+                        <Dropdown.Item className="dropdown-item" onClick={profile}>
+                            Settings
                         </Dropdown.Item>
                         <Dropdown.Item className="dropdown-item" onClick={logout}>Logout</Dropdown.Item>
                     </Dropdown.Menu>

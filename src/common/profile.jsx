@@ -48,7 +48,7 @@ class Profile extends React.Component {
       getDetails(this.props.params.id).then(res => {
         setTimeout(() => {
           this.setState({ loading: false });
-        }, 3000);
+        }, 0);
         this.setState({ userProfile: res });
         this.setState({ profile: { name: res.name } });
       }).catch(error => {
@@ -99,7 +99,8 @@ class Profile extends React.Component {
         const payload = {
           user: this.state.userProfile,
           profile: this.state.profile,
-          file: this.state.profile.file
+          file: this.state.profile.file,
+          userId: this.state.userProfile.uid
         }
         updateUser(payload).then(res => {
           if (res) {

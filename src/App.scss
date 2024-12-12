@@ -15,12 +15,16 @@
     color: #505050;
   }
   .dropdown-button {
+    display: flex;
     background-color: white;
     color: #0d6efd;
     border: none;
     padding: 0px;
     padding-right: 10px;
     padding-left: 10px;
+  }
+  .dropdown-toggle::after {
+    margin-top: 20px;
   }
   .dropdown-item:active {
     background-color: #0d6efd;

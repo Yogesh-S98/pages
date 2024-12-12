@@ -49,24 +49,40 @@ const provider = new GoogleAuthProvider();
 //    return res;
 // }
 
+const user = JSON.parse(localStorage.getItem('user'));
+
 export const signInWithGoogle = async () => {
     try {
         const res = await signInWithPopup(auth, provider);
         const user = res.user;
         const q = query(collection(db, "users"), where("uid", "==", user.uid));
         const docs = await getDocs(q);
-        if (docs.docs.length === 0) {
-            await addDoc(collection(db, "users"), {
+        if (!docs.empty) {
+            // If the user exists, return their details
+            const userData = docs.docs[0].data();
+            localStorage.setItem('user', JSON.stringify(userData));
+            return userData;
+        } else {
+            // If the user doesn't exist, add them to Firestore
+            const result = await addDoc(collection(db, "users"), {
                 uid: user.uid,
                 name: user.displayName,
                 authProvider: "google",
                 email: user.email,
-                avatar: user.photoURL
+                avatar: user.photoURL,
             });
+            successNotification('Loing Successfully');
+            const userd = {
+                uid: user.uid,
+                name: user.displayName,
+                authProvider: "google",
+                email: user.email,
+                avatar: user.photoURL,
+                id: result.id,
+            }
+            localStorage.setItem('user', JSON.stringify(userd));
+            return userd;
         }
-        const result = docs.docs.map((data) => data.data())[0];
-        successNotification('Loing Successfully');
-        return result;
     } catch (error) {
         console.log(error);
         errorNotification('Error login');
@@ -91,7 +107,7 @@ export const saveComment = async ({ postId, comment, userId }) => {
 export const getComments = async (value) => {
     const q = query(collection(db, "comments"), where("postId", "==", value));
     const querySnapshot = await getDocs(q);
-    const que = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+    const que = await querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
     return que;
 }
 
@@ -107,15 +123,14 @@ export const addReplyComment = async (value) => {
     return docRef;
 }
 
-const user = JSON.parse(localStorage.getItem('user'));
 export const savePosts = async (file) => {
     try {
-        const uploadFile = ref(storage, `/images/${user.uid}/${file.name}`);
+        const uploadFile = ref(storage, `/images/${file.user.uid}/${file.name}`);
         const docResult = await uploadBytes(uploadFile, file.file);
         const downloadURL = await getDownloadURL(uploadFile);
         await addDoc(collection(db, "files"), {
-            userId: user.uid,
-            user: user,
+            userId: file.user.uid,
+            user: file.user,
             name: file.name,
             likes: 'under',
             file: downloadURL,
@@ -185,7 +200,7 @@ export const getDetails = async (value) => {
 export const updateUser = async (value) => {
     const payload = value.user;
     if (value.file) {
-        const updatepic = ref(storage, `/profiles/${user.uid}/${value.profile.file.name}`);
+        const updatepic = ref(storage, `/profiles/${value.userId}/${value.profile.file.name}`);
         await uploadBytes(updatepic, value.profile.file);
         const downloadURL = await getDownloadURL(updatepic);
         payload.avatar = downloadURL;
@@ -194,7 +209,7 @@ export const updateUser = async (value) => {
         payload.name = value.profile.name;
     }
     const docRef = await getDocs(query(collection(db, "users"),
-        where("uid", "==", value.user.uid)));
+        where("uid", "==", value.userId)));
     try {
         const docGet = doc(db, 'users', docRef.docs[0].id);
         await updateDoc(docGet, payload);
@@ -249,7 +264,7 @@ export const getSavePosts = async () => {
     const q = query(collectionRef, orderBy("createdAt", "desc"));
     const querySnapshot = await getDocs(q);
     // console.log('adfa', querySnapshot);
-    return querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+    return await querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
     // onSnapshot(q, (snapshot) => {
     //     const data = snapshot.docs.map((doc) => ({
     //       id: doc.id,

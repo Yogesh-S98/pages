@@ -1,9 +1,10 @@
 .loading {
+    z-index: 2000;
     position: fixed;
     // top: 0;
     // left: 0;
     width: 100%;
-    margin-top: -65px;
+    margin-top: -40px;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.23); /* Transparent black background */
     display: flex;

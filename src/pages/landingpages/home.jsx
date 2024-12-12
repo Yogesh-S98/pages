@@ -57,11 +57,11 @@ function Home() {
         console.log('dadf', event);
     }
     const load = async () => {
-        getSavePosts().then(results => {
-            setList(results);
+        getSavePosts().then(async (results) => {
+            await setList(results);
             setTimeout(() => {
                 setloading(false);
-            }, 3000);
+            }, 0);
         });
         return;
     }
@@ -172,13 +172,15 @@ function Home() {
         )
     }
     const Submit = async (file) => {
+        const user = JSON.parse(localStorage.getItem('user'));
         setImageload(true);
         const payload = {
             name: file.file.name,
             file: file.file,
             video: file.file.type === 'video/mp4',
             note: file.note,
-            filter: file.filter
+            filter: file.filter,
+            user
         }
         const result = await savePosts(payload);
         if (result) {

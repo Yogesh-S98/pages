@@ -26,13 +26,13 @@ function Login() {
           if (res) {
             setTimeout(() => {
               setloading(false);
-            }, 1000);
-            localStorage.setItem('user', JSON.stringify(res));
-            Navigate('/home');
+              // localStorage.setItem('user', JSON.stringify(res));
+              Navigate('/home');
+            }, 1);
           } else {
             setTimeout(() => {
               setloading(false);
-            }, 1000);
+            }, 1);
           }
         });
         console.log('ada', result);
