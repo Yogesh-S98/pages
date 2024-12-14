@@ -25,6 +25,7 @@ function Home() {
     const [name, setname] = useState();
     const [userId, setUserId] = useState('');
     const [commentList, setCommentList] = useState([]);
+    const [storeLike, setStoreLike] = useState(false);
     const [list, setList] = useState([]);
     const [loading, setloading] = useState(true);
     const [imageload, setImageload] = useState(false);
@@ -54,7 +55,6 @@ function Home() {
     const closeDeleteModal = () => setPostDelete(false);
     const updateComment = (event) => {
         setComment(event.target.value);
-        console.log('dadf', event);
     }
     const load = async () => {
         getSavePosts().then(async (results) => {
@@ -66,6 +66,7 @@ function Home() {
         return;
     }
     const handleLike = async (postId, value) => {
+        setStoreLike(true);
         await saveLike({ postId, like: value, userId: userId });
         load();
     }
@@ -93,6 +94,7 @@ function Home() {
         // loadComment();
     }
     const addLike = async (item, value, list) => {
+        setStoreLike(true);
         const array = list.likes.map((d) => {
             return d;
         })
@@ -101,6 +103,7 @@ function Home() {
         load();
     }
     const removeLike = async (item, list) => {
+        setStoreLike(false);
         const filterLikes = list.likes.filter((d) => d.userId !== userId);
         await addLikes({ likes: filterLikes, postId: item });
         load();
@@ -126,7 +129,9 @@ function Home() {
                 }
                 {
                     !item.video && (
-                        <img className="post-image" alt="post" src={item.file} style={{width: '100%', filter: item.filter}} />
+                        <div>
+                        { item.file ? 
+                        <img className="post-image" alt="post" src={item.file} style={{width: '100%', filter: item.filter}} /> : '' }</div>
                     )
                 }
                 {item.message.length > 0 ? <div className="post-description">
@@ -134,15 +139,20 @@ function Home() {
                 </div> : ''}
                 <div className="post-sub">
                     <div className="likes-div">
-                    { item.likes === 'under'
-                        ? <img alt="like" src={likeUrl} onClick={() => handleLike(item.id, true)}  width={20} />
-                        : item.likes.filter((d) => d.like === true && d.userId === userId).length > 0 ? 
-                        item.likes.filter((d) => d.like === true && d.userId === userId)
-                        .map((d) => (
-                            <div>
-                                <img alt="redlike" src={redlikeUrl} onClick={() => removeLike(d.postId, item)}  width={20} />
-                            </div>
-                        )) : <img alt="likeadd" src={likeUrl} onClick={() => addLike(item.id, true, item)}  width={20} />
+                    { storeLike && item.likes === 'under' ? 
+                        <img alt="redlike" src={redlikeUrl} onClick={() => setStoreLike(false)}  width={20} /> :
+                    <div>
+                        { item.likes === 'under'
+                            ? <img alt="like" src={likeUrl} onClick={() => handleLike(item.id, true)}  width={20} />
+                            : item.likes.filter((d) => d.like === true && d.userId === userId).length > 0 ? 
+                            item.likes.filter((d) => d.like === true && d.userId === userId)
+                            .map((d) => (
+                                <div>
+                                    <img alt="redlike" src={redlikeUrl} onClick={() => removeLike(d.postId, item)}  width={20} />
+                                </div>
+                            )) : <img alt="likeadd" src={likeUrl} onClick={() => addLike(item.id, true, item)}  width={20} />
+                        }
+                    </div>
                     }
                     </div>
                     <div style={{ paddingLeft: '5px', paddingTop: '2px' }}>{
@@ -325,9 +335,12 @@ function Home() {
                                 )
                                 }
                                 {
-                                    !deleteObj.video && (
-                                        <img className="post-image" alt="post" src={deleteObj.file} style={{width: '100%'}} />
+                                    !deleteObj.video && deleteObj.file && (
+                                        <img className="post-image" alt="post" src={deleteObj.file} style={{width: '100%', filter: deleteObj.filter}} />
                                     )
+                                }
+                                {deleteObj.message ? <div className="post-description">
+                                    {deleteObj.message}</div> : ''
                                 }
                                     <Col className="pt-2" style={{display: 'flex', justifyContent: 'flex-end'}}>
                                         <Button onClick={() => deletePost(deleteObj)}>Delete</Button>

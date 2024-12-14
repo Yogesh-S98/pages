@@ -7,6 +7,7 @@ import "react-image-crop/dist/ReactCrop.css";
 import { filters } from "./filtersList";
 import { Col } from "react-bootstrap";
 import './uploadPost.scss';
+import { errorNotification } from "../../../common/notification";
 
 class UploadPosts extends Component {
     constructor(props) {
@@ -36,7 +37,6 @@ class UploadPosts extends Component {
     }
     handleFileChange = (event) => {
         const files = Array.from(event.target.files);
-        console.log('sdafa', files);
         for (let file of files) {
             this.setState({
                 selectedFile: file,
@@ -51,6 +51,13 @@ class UploadPosts extends Component {
     };
     changeImage = () => {
         this.imageRef = '';
+        this.state.crop = {
+            unit: "%",
+            width: 100,
+            height: 100,
+            x: 100,
+            y: 100
+        };
         this.state.croppedBlob = null;
         this.state.croppedImageUrl = null;
         this.state.filter = null;
@@ -60,15 +67,19 @@ class UploadPosts extends Component {
         this.setState({ note: event.target.value });
     };
     submitProp = () => {
-        const { croppedBlob, selectedFile, filter } = this.state;
-        const setPost = {
-            file: new File([croppedBlob], selectedFile.name, {
-                type: croppedBlob.type
-            }),
-            filter: filter,
-            note: this.state.note
+        const { croppedBlob, selectedFile } = this.state;
+        if (selectedFile || this.state.note) {
+            const setPost = {
+                file: selectedFile ? new File([this.state.croppedBlob], selectedFile.name, {
+                    type: croppedBlob.type
+                }) : '',
+                filter: this.state.filter,
+                note: this.state.note
+            }
+            this.props.submitPost(setPost);
+        } else {
+            errorNotification('Add Image or note');
         }
-        this.props.submitPost(setPost);
         // this.props.submitPost(this.state.selectedFile);
     }
     editFilter = () => {
@@ -124,7 +135,6 @@ class UploadPosts extends Component {
         }
     };
     handleFilterChange = (filter) => {
-        console.log('adfas');
         this.setState({ filter })
     };
     render() {
@@ -148,15 +158,15 @@ class UploadPosts extends Component {
                             this.state.croppedImageUrl ? 
                             <div style={{ display: 'flex' }}>
                                 <div style={{ paddingRight: '10px', paddingBottom: '10px' }}>
-                                <Button  onClick={this.changeImage}>Change</Button>
+                                <Button  onClick={this.changeImage}>Change Image</Button>
                                 </div>
                                 <div>
                                 { !this.state.fileType ?
-                                <Button onClick={this.editFilter}>Edit</Button> : '' }
+                                <Button onClick={this.editFilter}>Edit Crop</Button> : '' }
                                 </div>
                             </div> : ''
                             :
-                            <Button onClick={this.handleClick}>Select Post</Button>
+                            <Button onClick={this.handleClick}>Select Image</Button>
                         }
                     </div>
                     {this.state.imageUrl && !this.state.fileType ? this.state.croppedImageUrl ?
@@ -192,8 +202,30 @@ class UploadPosts extends Component {
                                 onComplete={this.handleOnCropComplete}
                                 onImageLoaded={this.onImageLoaded}
                             />
+                            {/* {this.state.isCropping ? (
+                                <ReactCrop
+                                    src={this.state.imageUrl}
+                                    crop={this.state.crop}
+                                    onChange={this.handleOnCropChange}
+                                    onComplete={this.handleOnCropComplete}
+                                    onImageLoaded={this.onImageLoaded}
+                                />
+                                ) : (
+                                    <img
+                                        src={this.state.imageUrl}
+                                        alt="Preview"
+                                        style={{ maxWidth: '100%', marginBottom: '20px' }}
+                                    />
+                                )
+                            } */}
+                            {/* <div style={{ display: 'flex', justifyContent: 'start' }}>
+                                {!this.state.isCropping && (
+                                    <Button style={{marginRight: '10px'}} onClick={this.startCropping}>Crop Image</Button>
+                                )}
+                                <Button onClick={this.saveCropImage}>Add Filters</Button>
+                            </div> */}
                             <div style={{ display: 'flex', justifyContent: 'start' }}>
-                            <Button onClick={this.saveCropImage}>Save</Button>
+                            <Button onClick={this.saveCropImage}>Add Filters</Button>
                             </div>
                         </div>
                         :
@@ -205,9 +237,10 @@ class UploadPosts extends Component {
                         </div>
                     }
                     <div className="comments-input pt-2">
+                        
+                    {/* disabled={!this.state.imageUrl} */}
                         <InputGroup>
                             <Form.Control
-                                disabled={!this.state.imageUrl}
                                 placeholder="Note"
                                 value={this.state.note}
                                 onChange={this.updateNote}

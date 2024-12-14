@@ -125,22 +125,39 @@ export const addReplyComment = async (value) => {
 
 export const savePosts = async (file) => {
     try {
-        const uploadFile = ref(storage, `/images/${file.user.uid}/${file.name}`);
-        const docResult = await uploadBytes(uploadFile, file.file);
-        const downloadURL = await getDownloadURL(uploadFile);
-        await addDoc(collection(db, "files"), {
-            userId: file.user.uid,
-            user: file.user,
-            name: file.name,
-            likes: 'under',
-            file: downloadURL,
-            video: file.video,
-            message: file.note,
-            filter: file.filter,
-            createdAt: serverTimestamp()
-        });
+        let uploadFile = '';
+        let downloadURL = '';
+        let result = '';
+        if (file.file) {
+            uploadFile = ref(storage, `/images/${file.user.uid}/${file.name}`);
+            result = await uploadBytes(uploadFile, file.file);
+            downloadURL = await getDownloadURL(uploadFile);
+            await addDoc(collection(db, "files"), {
+                userId: file.user.uid,
+                user: file.user,
+                name: file.name,
+                likes: 'under',
+                file: downloadURL,
+                video: file.video,
+                message: file.note,
+                filter: file.filter,
+                createdAt: serverTimestamp()
+            });
+        } else {
+            result = await addDoc(collection(db, "files"), {
+                userId: file.user.uid,
+                user: file.user,
+                name: '',
+                likes: 'under',
+                file: '',
+                video: '',
+                message: file.note,
+                filter: '',
+                createdAt: serverTimestamp()
+            });
+        }
         successNotification('Post Uploaded');
-        return docResult;
+        return result;
     } catch (error) {
         errorNotification(error);
         console.error(error);
@@ -226,7 +243,6 @@ export const updateUser = async (value) => {
 export const getPost = async (postId) => {
     const ref = doc(db, `files/${postId}`);
     const querySnapshot = await getDoc(ref);
-    console.log('dsafa', querySnapshot.data());
     return querySnapshot.data();
 }
 

@@ -148,9 +148,10 @@ class Profile extends React.Component {
                       bottom: '4%',
                       right: '10%' }}>
                       <div>
+                        { userProfile.uid === users.uid ? 
                         <img 
                           className="cursor-pointer"
-                          onClick={this.uploadProfile} src={edit} width={25}/>
+                          onClick={this.uploadProfile} src={edit} width={25}/> : '' }
                       </div>
                     </div>
                     </div>
@@ -167,11 +168,12 @@ class Profile extends React.Component {
                       </InputGroup>
                     </Col>
                       <Col className="d-flex justify-content-end">
+                      { userProfile.uid === users.uid ?
                       <Button
                           onClick={this.updateProfile}
                           >
                           Update
-                      </Button>
+                      </Button> : '' }
                       </Col>
                 </Col>
                 <Modal size="md" show={show}>
