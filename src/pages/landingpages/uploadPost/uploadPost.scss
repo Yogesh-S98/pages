@@ -8,3 +8,10 @@
         width: 400px !important;
     }
 }
+.ReactCrop__crop-selection {
+    border: 2px solid black !important; /* Change border style and color */
+}
+/* Crop drag handles as lines */
+.ReactCrop__drag-handle {
+    border: 5px solid black !important;
+}
