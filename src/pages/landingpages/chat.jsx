@@ -44,6 +44,7 @@ function Chat() {
     setSelectedTimezone([]);
   };
     const handleRemoveTimezone = (index) => {
+
         timezoneList.splice(index, 1);
         // setTimezoneList(timezoneList.filter((tz) => tz.name !== name));
     };
