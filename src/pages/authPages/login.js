@@ -22,7 +22,6 @@ function Login() {
           setloading(true);
         }, 1000);
         const result = await signInWithGoogle().then(async res => {
-          
           if (res) {
             setTimeout(() => {
               setloading(false);
