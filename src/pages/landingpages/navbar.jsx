@@ -69,6 +69,9 @@ function NavBar() {
                      : '' }
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
+                        <Dropdown.Item className="dropdown-item" onClick={() => Navigate('/chat')}>
+                            Chat
+                        </Dropdown.Item>
                         <Dropdown.Item className="dropdown-item" onClick={profile}>
                             Settings
                         </Dropdown.Item>

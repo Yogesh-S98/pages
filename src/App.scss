@@ -37,4 +37,50 @@
       color: white !important;
     }
   }
+  .header {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #0d6efd;
+    font-family: math;
+  }
+  @media (max-width: 1000px) {
+    .chat-header {
+      justify-content: start !important;
+    }
+  }
+  /* 🌟 Super Minimalist Scrollbar: Only the Bar (Thumb) 🌟 */
+
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* Track invisible */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #888; /* Only the thumb (the bar) */
+  border-radius: 4px;
+}
+
+/* Remove up/down buttons (arrows) */
+::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* On hover make the bar darker */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #888 transparent; /* Thumb color, transparent track */
+}
+
 }

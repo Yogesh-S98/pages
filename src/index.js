@@ -4,11 +4,14 @@ import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { MessageProvider } from './common/MessageContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <MessageProvider>
+      <App />
+    </MessageProvider>
   </React.StrictMode>
 );
 

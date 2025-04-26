@@ -16,6 +16,7 @@ import {
     orderBy,
     onSnapshot,
     serverTimestamp,
+    setDoc,
 } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { errorNotification, successNotification } from "../common/notification";
@@ -310,6 +311,86 @@ export const getSavePosts = async () => {
 //     const querySnapshot = await getDocs(q);
 //     return querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
 // }
+
+export const getUsersList = async () => {
+    const snapshot = await getDocs(collection(db, 'users'));
+    const filtered = snapshot.docs
+        .map(doc => doc.data())
+        .filter(user => user.uid !== auth.currentUser.uid);
+    return filtered;
+}
+
+export const getOrCreateConversation = async (userA, userB) => {
+    const conversationsRef = collection(db, "conversations");
+    const q = query(
+      conversationsRef,
+      where("users", "in", [
+        [userA, userB],
+        [userB, userA]
+      ])
+    );
+    const snapshot = await getDocs(q);
+    if (!snapshot.empty) {
+      return snapshot.docs[0].id;
+    }
+  
+    // Create new conversation
+    const newConversation = await addDoc(conversationsRef, {
+      users: [userA, userB],
+      updatedAt: serverTimestamp()
+    });
+    return newConversation.id;
+};
+
+export const sendUserMessage = async (conversationId, fromUserId, text) => {
+    try {
+        const messagesRef = collection(db, "conversations", conversationId, "messages");
+        await addDoc(messagesRef, {
+          from: fromUserId,
+          text,
+          createdAt: serverTimestamp()
+        });
+      
+        // Update conversation timestamp
+        await setDoc(
+          doc(db, "conversations", conversationId),
+          {
+            updatedAt: serverTimestamp(),
+            lastMessage: text
+          },
+          { merge: true }
+        );
+        return 'success';
+    }  catch (error) {
+        errorNotification(error);
+        console.error(error);
+        return error;
+    }
+}
+
+export const getUserMessages = async (conversationId) => {
+    try {
+      const ref = collection(db, "conversations", conversationId, "messages");
+      const q = query(
+        ref,
+        orderBy("createdAt", "asc")
+    );
+  
+      const querySnapshot = await getDocs(q);
+  
+      const messages = querySnapshot.docs.map(doc => ({
+        id: doc.id,         // always good to have document ID!
+        ...doc.data()
+      }));
+  
+      console.log('Fetched messages:', messages);
+      return messages;
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+      errorNotification(error.message || "Something went wrong while fetching messages.");
+      throw error; // Also rethrow if caller needs to catch
+    }
+  };
 
 provider.setCustomParameters({
     prompt: 'select_account'

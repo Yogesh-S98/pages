@@ -6,6 +6,7 @@ import Loading from "./loading";
 import { Col, Container, FloatingLabel, Modal } from "react-bootstrap";
 import { InputGroup, Form, Button } from "react-bootstrap";
 import edit from '../assets/pencil.svg';
+import { withNavigation } from "./withNavigate";
 // import NavBar from "../pages/landingpages/navbar";
 // import ProfileAvatar from "./profileAvatar";
 
@@ -112,6 +113,11 @@ class Profile extends React.Component {
         })
       }
     }
+
+    handleGoBack = (e) => {
+      e.preventDefault();
+      this.props.navigate(-1); // or history.go(-1)
+    };
     render() {
       const { userProfile, users, loading, show, profile } = this.state;
         return (
@@ -123,7 +129,8 @@ class Profile extends React.Component {
               <Col lg="9" className="p-3">
               
                 <Link
-                    to={`/home`}
+                   to="#"
+                    onClick={this.handleGoBack}
                     className="link">
                     Go Back
                 </Link>
@@ -203,4 +210,4 @@ class Profile extends React.Component {
     }
 }
 
-export default withParams(Profile);
+export default withNavigation(withParams(Profile));
