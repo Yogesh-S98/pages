@@ -16,11 +16,11 @@ import ChatRoom from "./pages/landingpages/uploadPost/chatRoom";
 
 
 function App() {
-    useEffect(() => {
-      if (Notification.permission !== "granted") {
-        Notification.requestPermission();
-      }
-    }, []);
+    // useEffect(() => {
+    //   if (Notification.permission !== "granted") {
+    //     Notification.requestPermission();
+    //   }
+    // }, []);
   
     return (
       <div className="App">
