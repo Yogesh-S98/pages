@@ -12,6 +12,7 @@ function ChatRoom() {
     const [chatId, setChatId] = useState('');
     const [messages, setMessages] = useState([])
 
+    
     const fetchUser = async () => {
         if (params?.id) {
             const res = await getDetails(params.id);
