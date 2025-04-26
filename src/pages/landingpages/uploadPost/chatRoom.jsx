@@ -100,7 +100,7 @@ function ChatRoom() {
                     </div>
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'end' }}>
+                <div style={{ display: 'flex', justifyContent: 'end' }} className="set-mobile-view">
                     <Col lg="9">
                         <Col lg="8">
                         <div style={{ padding: "10px", display: "flex", flexDirection: "column", gap: "8px", maxHeight: '70vh', overflowY: 'auto' }}>
