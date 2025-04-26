@@ -44,12 +44,10 @@ class CommentsList extends Component {
         this.setState({ loading: true });
         setTimeout(() => {
             this.setState({ comments: this.props.data, loading: false });
-            console.log('dafas', this.props.data);
         }, 1000);
     }
 
     editComment = (value) => {
-        console.log('dafas', value);
         this.setState({ commentEdit: true });
         this.setState({ editcomment: value });
         this.setState({ newComment: value.comment });

@@ -34,7 +34,6 @@ function Login() {
             }, 1);
           }
         });
-        console.log('ada', result);
       } catch (error) {
         errorNotification('error');
         Navigate('/login');

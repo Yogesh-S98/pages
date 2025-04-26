@@ -17,6 +17,7 @@ import {
     onSnapshot,
     serverTimestamp,
     setDoc,
+    limit,
 } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { errorNotification, successNotification } from "../common/notification";
@@ -383,7 +384,6 @@ export const getUserMessages = async (conversationId) => {
         ...doc.data()
       }));
   
-      console.log('Fetched messages:', messages);
       return messages;
     } catch (error) {
       console.error('Error fetching messages:', error);
@@ -392,6 +392,42 @@ export const getUserMessages = async (conversationId) => {
     }
   };
 
+  export const getConversationSummary = async (conversationId) => {
+    try {
+        const ref = collection(db, "conversations", conversationId, "messages");
+        const q = query(ref, orderBy("createdAt", "desc"), limit(1));  // latest message only
+        const querySnapshot = await getDocs(q);
+    
+        if (!querySnapshot.empty) {
+          const doc = querySnapshot.docs[0];
+          return { id: doc.id, ...doc.data() };
+        } else {
+          return null;
+        }
+      } catch (error) {
+        console.error("Error fetching latest message: ", error);
+        return null;
+      }
+  };
+
+  export function listenToMessages(conversationId, callback) {
+    if (!conversationId) return;
+
+    const messagesRef = collection(db, 'conversations', conversationId, 'messages');
+    const q = query(messagesRef, orderBy('createdAt', 'desc'), limit(1));
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+            if (change.type === 'added') {
+                const newMessage = { id: change.doc.id, ...change.doc.data() };
+                callback(newMessage);
+            }
+        });
+    });
+
+    return unsubscribe; // If you want to stop listening later
+}
+  
 provider.setCustomParameters({
     prompt: 'select_account'
 });
