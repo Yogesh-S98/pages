@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import {
     BrowserRouter,
     Routes,
@@ -14,6 +14,7 @@ import NavBar from "./pages/landingpages/navbar";
 import Chat from "./pages/landingpages/chat";
 import ChatRoom from "./pages/landingpages/uploadPost/chatRoom";
 
+export const ChatContext = createContext();
 
 function App() {
     // useEffect(() => {
@@ -21,9 +22,10 @@ function App() {
     //     Notification.requestPermission();
     //   }
     // }, []);
-  
+    const [activeChatUserId, setActiveChatUserId] = useState(null);
     return (
       <div className="App">
+        <ChatContext.Provider value={{ activeChatUserId, setActiveChatUserId }}>
       <BrowserRouter>
           <NavBar></NavBar>
         <Routes>
@@ -64,6 +66,7 @@ function App() {
         </Routes>
       </BrowserRouter>
       <ToastContainer></ToastContainer>
+      </ChatContext.Provider>
       </div>
     );
 }

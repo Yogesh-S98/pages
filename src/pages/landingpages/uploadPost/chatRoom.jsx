@@ -1,18 +1,37 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import { auth, getDetails, getOrCreateConversation, getUserMessages, sendUserMessage } from "../../../googleSignIn/config";
 import { Button, Col, Container, Form, InputGroup, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { listenForNewMessages } from "../../../common/listenNotifications";
+import { ChatContext } from "../../../App";
 
 function ChatRoom() {
     const params = useParams();
     const [user, setUser] = useState({});
     const [text, setText] = useState("");
     const [chatId, setChatId] = useState('');
-    const [messages, setMessages] = useState([])
+    const [messages, setMessages] = useState([]);
+    const { setActiveChatUserId } = useContext(ChatContext);
 
-    
+    useEffect(() => {
+        if (user?.uid) {
+          setActiveChatUserId(user.uid);
+        }
+      
+        return () => {
+          setActiveChatUserId(null);  // Clear when leaving the chat room
+        };
+    }, [user?.uid]);
+
+    const bottomRef = useRef(null);
+
+    useEffect(() => {
+        if (bottomRef.current) {
+            bottomRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [messages]);
+
     const fetchUser = async () => {
         if (params?.id) {
             const res = await getDetails(params.id);
@@ -31,7 +50,6 @@ function ChatRoom() {
 
     const sendMessage = async () => {
         if (text.trim() === "") return;
-        console.log('gggg', text, chatId)
         const result = await sendUserMessage(chatId, auth.currentUser.uid, text);
         if (result) {
             setText('');
@@ -105,6 +123,7 @@ function ChatRoom() {
                                 </div>
                                 );
                             })}
+                            <div ref={bottomRef}></div>
                         </div>
                         </Col>
                     </Col>

@@ -1,25 +1,89 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { getUsersList } from '../../googleSignIn/config';
+import { auth, getConversationSummary, getLatestMessage, getOrCreateConversation, getUsersList, listenToMessages } from '../../googleSignIn/config';
 import ProfileAvatar from '../../common/profileAvatar';
+import { ChatContext } from '../../App';
 
 function Chat() {
     const [users, setUsers] = useState([]);
+    const [summaries, setSummaries] = useState({});
+    const { activeChatUserId } = useContext(ChatContext);
+
 
     const fetchUsers = async () => {
         try {
             const res = await getUsersList();
             setUsers(res);
-            console.log('Fetched users:', res); // Log the response here
+            // Parallel fetching all conversation summaries
+            const promises = res.map(async (user) => {
+                if (user.uid !== auth.currentUser.uid) {
+                const conversationId = await getOrCreateConversation(auth.currentUser.uid, user.uid);
+                const summary = await getConversationSummary(conversationId);
+                return { ...user, conversationId, summary };
+                }
+                return null;
+            });
+
+            const results = await Promise.all(promises);
+            const newUsers = results.filter(item => item !== null); // Filter out null values
+            setUsers(newUsers);
+
+            const newSummaries = {};
+
+            results.forEach((item) => {
+                if (item) {
+                newSummaries[item.uid] = item.summary;
+                }
+            });
+            setSummaries(newSummaries);
         } catch (error) {
             console.error('Failed to fetch users:', error);
         }
     };
 
+    const requestNotificationPermission = () => {
+        if (Notification.permission !== 'granted') {
+          Notification.requestPermission().then(permission => {
+            if (permission !== 'granted') {
+              console.warn('Notifications permission denied');
+            }
+          });
+        }
+      };
+
     useEffect(() => {
         fetchUsers();
+        requestNotificationPermission();
     }, []);
+
+    useEffect(() => {
+        if (users.length > 0) {
+          users.forEach(user => {
+            // Start listening to messages
+            if (user.conversationId) {
+              listenToMessages(user.conversationId, (newMessage) => {
+                if (newMessage.from !== auth.currentUser.uid) {
+                    if (activeChatUserId !== user.uid) {
+                        const notification = new Notification(`New message from ${user.name}`, {
+                          body: newMessage.text,
+                          icon: user.avatar,
+                        });
+                        notification.onclick = (event) => {
+                            event.preventDefault(); // Prevent default browser behavior
+                            window.focus(); // Focus the tab if it's in the background
+                            window.location.href = `/chat/${user.uid}`; // Navigate to chat page
+                        };
+                      } else {
+                        // console.log('No notification - already chatting with', user.name);
+                      }
+                }
+              });
+            }
+          });
+        }
+      }, [users]);
+    
     return (
         <div style={{ display: 'flex', justifyContent: 'center' }}>
             <Container>
@@ -37,10 +101,23 @@ function Chat() {
                                     padding: '15px'
                                 }}>
                                     <div>
-                                        <Link to={`/chat/${user?.uid}`} style={{ textDecoration: 'none', color: 'black' }}>
-                                            <img style={{borderRadius: '50px'}} src={user?.avatar} alt="User Avatar" width={30} height={30} />
-                                            <span style={{paddingLeft: '10px', fontWeight: 600}}>{user?.name}</span>
-                                        </Link>
+                                    <Link to={`/chat/${user?.uid}`} style={{ textDecoration: 'none', color: 'black' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                                            <img
+                                            style={{ borderRadius: '50px' }}
+                                            src={user?.avatar}
+                                            alt="User Avatar"
+                                            width={30}
+                                            height={30}
+                                            />
+                                            <div style={{ paddingLeft: '10px' }}>
+                                            <div style={{ fontWeight: 600 }}>{user?.name}</div>
+                                            <div style={{ fontSize: '12px', color: '#666', marginTop: '2px' }}>
+                                                {summaries[user?.uid]?.text || "No messages yet"}
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </Link>
                                     </div>
                                 </Col>
                             ))}
