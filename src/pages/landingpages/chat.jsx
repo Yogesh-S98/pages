@@ -27,6 +27,13 @@ function Chat() {
 
             const results = await Promise.all(promises);
             const newUsers = results.filter(item => item !== null); // Filter out null values
+
+            newUsers.sort((a, b) => {
+              const timeA = a.summary?.createdAt ? a.summary.createdAt.toMillis() : 0;
+              const timeB = b.summary?.createdAt ? b.summary.createdAt.toMillis() : 0;
+              return timeB - timeA; // latest first
+            });
+  
             setUsers(newUsers);
 
             const newSummaries = {};
@@ -47,6 +54,8 @@ function Chat() {
           Notification.requestPermission().then(permission => {
             if (permission !== 'granted') {
               console.warn('Notifications permission denied');
+            } else {
+              console.log('Notifications permission granted');
             }
           });
         }
