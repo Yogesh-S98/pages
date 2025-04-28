@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
-import { auth, getDetails, getOrCreateConversation, getUserMessages, sendUserMessage } from "../../../googleSignIn/config";
+import { auth, getDetails, getOrCreateConversation, getUserMessages, listenToMessages, sendUserMessage } from "../../../googleSignIn/config";
 import { Button, Col, Container, Form, InputGroup, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { listenForNewMessages } from "../../../common/listenNotifications";
@@ -73,6 +73,15 @@ function ChatRoom() {
         }
     }, [user]);
 
+    useEffect(() => {
+        if (chatId) {
+          const unsubscribe = listenToMessages(chatId, (newMessage) => {
+            setMessages(prev => [...prev, newMessage]);
+          });
+      
+          return () => unsubscribe(); // Clean up listener
+        }
+      }, [chatId]);
     // useEffect(() => {
     //     const unsubscribe = listenForNewMessages(chatId, setMessages);
     
