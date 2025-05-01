@@ -3,7 +3,7 @@ import { Col, Container, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { auth, getConversationSummary, getLatestMessage, getOrCreateConversation, getUsersList, listenToMessages } from '../../googleSignIn/config';
 import ProfileAvatar from '../../common/profileAvatar';
-import { ChatContext } from '../../App';
+import { ChatContext } from '../../common/chatContext';
 
 function Chat() {
     const [users, setUsers] = useState([]);
@@ -73,7 +73,7 @@ function Chat() {
             if (user.conversationId) {
               listenToMessages(user.conversationId, (newMessage) => {
                 if (newMessage.from !== auth.currentUser.uid) {
-                    if (activeChatUserId !== user.uid) {
+                    if (activeChatUserId === user.uid) {
                         const notification = new Notification(`New message from ${user.name}`, {
                           body: newMessage.text,
                           icon: user.avatar,
@@ -97,7 +97,7 @@ function Chat() {
         <div style={{ display: 'flex', justifyContent: 'center' }}>
             <Container>
                 <div style={{justifyContent: 'end', display: 'flex'}}>
-                    <Col lg="9">
+                    <Col lg="9" xs="12">
                         <Link
                             to={`/home`}
                             className="link">
@@ -106,7 +106,7 @@ function Chat() {
                         <Col className='header'>Chat</Col>
                         <Col lg="8">
                             {users.map((user) => (
-                                <Col key={user.uid} style={{
+                                <Col key={user.uid} xs='auto' style={{
                                     padding: '15px'
                                 }}>
                                     <div>

@@ -369,6 +369,19 @@ export const sendUserMessage = async (conversationId, fromUserId, text) => {
     }
 }
 
+export const deleteUserMessage = async (conversationId, messageId) => {
+    try {
+      const messageRef = doc(db, "conversations", conversationId, "messages", messageId);
+      await deleteDoc(messageRef);
+    //   successNotification("Message deleted.");
+      return "success";
+    } catch (error) {
+    //   console.error("Error deleting message:", error);
+    //   errorNotification(error.message || "Failed to delete message.");
+      return error;
+    }
+};
+
 export const getUserMessages = async (conversationId) => {
     try {
       const ref = collection(db, "conversations", conversationId, "messages");
@@ -390,27 +403,27 @@ export const getUserMessages = async (conversationId) => {
       errorNotification(error.message || "Something went wrong while fetching messages.");
       throw error; // Also rethrow if caller needs to catch
     }
-  };
+};
 
-  export const getConversationSummary = async (conversationId) => {
+export const getConversationSummary = async (conversationId) => {
     try {
         const ref = collection(db, "conversations", conversationId, "messages");
         const q = query(ref, orderBy("createdAt", "desc"), limit(1));  // latest message only
         const querySnapshot = await getDocs(q);
-    
+
         if (!querySnapshot.empty) {
-          const doc = querySnapshot.docs[0];
-          return { id: doc.id, ...doc.data() };
+            const doc = querySnapshot.docs[0];
+            return { id: doc.id, ...doc.data() };
         } else {
-          return null;
+            return null;
         }
-      } catch (error) {
+    } catch (error) {
         console.error("Error fetching latest message: ", error);
         return null;
-      }
-  };
+    }
+};
 
-  export function listenToMessages(conversationId, callback) {
+export function listenToMessages(conversationId, callback) {
     if (!conversationId) return;
 
     const messagesRef = collection(db, 'conversations', conversationId, 'messages');
