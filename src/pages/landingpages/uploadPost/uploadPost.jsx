@@ -93,6 +93,21 @@ class UploadPosts extends Component {
     };
     onImageLoaded = (image) => {
         this.imageRef = image;
+        
+        // initial crop settings
+        const crop = {
+            unit: "%",
+            x: 0,
+            y: 0,
+            width: 100,
+            height: 100,
+        };
+
+        this.setState({ crop }, () => {
+            this.handleOnCropComplete(crop);
+        });
+
+        return false;
     };
     handleOnCropComplete = (crop) => {
         // const { src } = this.state;
